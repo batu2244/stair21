@@ -1,0 +1,15 @@
+{
+  "name": "Activity",
+  "type": "object",
+  "description": "Audit trail per hub",
+  "properties": {
+    "hub_id": { "type": "string" },
+    "action": { "type": "string" },
+    "actor": { "type": "string", "description": "Name of the advisor or reviewer, or 'client'" },
+    "detail": { "type": "string" }
+  },
+  "required": ["hub_id", "action"],
+  // No direct browser access. Reads and writes go through the hubs function
+  // (scoped by the browser's owner key) and the client-hub function (link token).
+  "rls": { "create": false, "read": false, "update": false, "delete": false }
+}

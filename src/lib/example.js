@@ -1,0 +1,42 @@
+// Built-in example hub, shown on the dashboard and at /c/example.
+export const EXAMPLE_HUB = {
+  client_name: "Maria Lopez",
+  first_name: "Maria",
+  advisor_name: "Sarah Chen",
+  advisor_title: "Wealth Advisor",
+  advisor_photo_url: "",
+  firm_name: "Northbridge Wealth",
+  firm_logo_url: "",
+  goals: ["Retire comfortably by 62", "Keep all retirement savings in one place", "Help pay for her daughter's college"],
+  plan_summary:
+    "Your plan brings your old 401(k) and your new workplace plan under one view. Moving the old account into an IRA makes it easier to see and manage everything together. Your college savings stay separate, so each goal has its own clear path.",
+  recap:
+    "You recently started a new job and still have a 401(k) with your old employer. You would like your savings in one place and a simple way to track your goals.",
+  steps: [
+    "Watch for the rollover forms we will email you by Friday.",
+    "Sign and return the forms.",
+    "We will confirm once the transfer is complete.",
+  ],
+  advisor_note: "It was great to catch up, Maria. Congratulations again on the new role.",
+  readings: [
+    {
+      title: "What is a rollover?",
+      body: "A rollover moves money from an old workplace retirement plan into another retirement account. Done directly between providers, the money stays set aside for retirement the whole time.",
+    },
+    {
+      title: "401(k) and IRA: the difference",
+      body: "A 401(k) is a retirement plan offered through an employer. An IRA is a retirement account you open yourself, so it stays with you when you change jobs.",
+    },
+  ],
+  portal_url: "https://example.com",
+  // A week from today at 10:00, so the example always shows an upcoming meeting.
+  next_meeting_at: (() => {
+    const d = new Date();
+    d.setDate(d.getDate() + 7);
+    d.setHours(10, 0, 0, 0);
+    return d.toISOString();
+  })(),
+  disclosure: "Northbridge Wealth is a registered investment adviser. This example is for illustration only.",
+  version: 1,
+  approved_at: "2026-10-01T12:00:00.000Z",
+};

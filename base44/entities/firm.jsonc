@@ -1,0 +1,15 @@
+{
+  "name": "Firm",
+  "type": "object",
+  "properties": {
+    "owner_key": { "type": "string", "description": "Secret key of the browser that owns this record" },
+    "name": { "type": "string", "description": "Firm name shown on every hub" },
+    "logo_url": { "type": "string" },
+    "portal_url": { "type": "string", "description": "Default custodian or planning portal link" },
+    "disclosure": { "type": "string", "description": "Firm disclosure shown in every hub footer" },
+    "link_expiry_days": { "type": "integer", "default": 30, "minimum": 1, "maximum": 365 }
+  },
+  // No direct browser access. Reads and writes go through the hubs function
+  // (scoped by the browser's owner key) and the client-hub function (link token).
+  "rls": { "create": false, "read": false, "update": false, "delete": false }
+}

@@ -1,0 +1,42 @@
+{
+  "name": "ClientHub",
+  "type": "object",
+  "properties": {
+    "owner_key": { "type": "string", "description": "Secret key of the browser that owns this record" },
+    "advisor_name": { "type": "string" },
+
+    // Advisor inputs
+    "client_name": { "type": "string" },
+    "goals_input": { "type": "string", "description": "Goals, one per line" },
+    "meeting_notes": { "type": "string" },
+    "next_step": { "type": "string" },
+
+    // Template slots (working copy; AI-drafted, advisor-edited)
+    "first_name": { "type": "string" },
+    "goals": { "type": "array", "items": { "type": "string" } },
+    "plan_summary": { "type": "string" },
+    "recap": { "type": "string" },
+    "steps": { "type": "array", "items": { "type": "string" } },
+    "advisor_note": { "type": "string" },
+    "readings": {
+      "type": "array",
+      "items": { "type": "object", "properties": { "title": { "type": "string" }, "body": { "type": "string" } } }
+    },
+    "portal_url": { "type": "string" },
+
+    // Review workflow
+    "status": { "type": "string", "enum": ["draft", "approved"], "default": "draft" },
+    "compliance_flags": { "type": "array", "items": { "type": "string" } },
+    "live_version": { "type": "integer", "default": 0, "description": "Approved snapshot clients see; 0 = not live" },
+
+    // Follow-up. Operational, so it can change after approval without a new version.
+    "next_meeting_at": { "type": "string", "format": "date-time", "description": "Next follow-up meeting" },
+    "follow_up_note": { "type": "string", "description": "Internal note, never shown to the client" },
+    "meeting_confirmed": { "type": "boolean", "default": false },
+    "meeting_confirmed_at": { "type": "string", "format": "date-time" }
+  },
+  "required": ["owner_key", "client_name"],
+  // No direct browser access. Reads and writes go through the hubs function
+  // (scoped by the browser's owner key) and the client-hub function (link token).
+  "rls": { "create": false, "read": false, "update": false, "delete": false }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "ShareLink",
+  "type": "object",
+  "properties": {
+    "hub_id": { "type": "string" },
+    "token_hash": { "type": "string", "description": "SHA-256 of the link token; the token itself is never stored" },
+    "expires_at": { "type": "string", "format": "date-time" },
+    "revoked": { "type": "boolean", "default": false },
+    "created_by": { "type": "string" },
+    "open_count": { "type": "integer", "default": 0 },
+    "last_opened_at": { "type": "string", "format": "date-time" }
+  },
+  "required": ["hub_id", "token_hash", "expires_at"],
+  // No direct browser access. Reads and writes go through the hubs function
+  // (scoped by the browser's owner key) and the client-hub function (link token).
+  "rls": { "create": false, "read": false, "update": false, "delete": false }
+}

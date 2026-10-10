@@ -1,0 +1,14 @@
+{
+  "name": "AdvisorProfile",
+  "type": "object",
+  "properties": {
+    "owner_key": { "type": "string", "description": "Secret key of the browser that owns this record" },
+    "name": { "type": "string", "description": "Name shown to clients" },
+    "title": { "type": "string", "description": "e.g. Wealth Advisor" },
+    "photo_url": { "type": "string" }
+  },
+  "required": ["owner_key", "name"],
+  // No direct browser access. Reads and writes go through the hubs function
+  // (scoped by the browser's owner key) and the client-hub function (link token).
+  "rls": { "create": false, "read": false, "update": false, "delete": false }
+}

@@ -1,0 +1,26 @@
+{
+  // Legacy: pages from the first version of the app. Kept so existing records
+  // aren't deleted. Not used by the current app and not readable from the browser.
+  "name": "ClientPage",
+  "type": "object",
+  "properties": {
+    "owner_key": { "type": "string" },
+    "client_name": { "type": "string" },
+    "situation": { "type": "string" },
+    "next_step": { "type": "string" },
+    "advisor_name": { "type": "string" },
+    "advisor_photo_url": { "type": "string" },
+    "company_name": { "type": "string" },
+    "company_logo_url": { "type": "string" },
+    "first_name": { "type": "string" },
+    "recap": { "type": "string" },
+    "steps": { "type": "array", "items": { "type": "string" } },
+    "readings": {
+      "type": "array",
+      "items": { "type": "object", "properties": { "title": { "type": "string" }, "body": { "type": "string" } } }
+    },
+    "status": { "type": "string", "enum": ["draft", "approved"], "default": "draft" },
+    "meeting_confirmed": { "type": "boolean", "default": false }
+  },
+  "rls": { "create": false, "read": false, "update": false, "delete": false }
+}

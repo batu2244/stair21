@@ -1,0 +1,27 @@
+# Dependencies
+node_modules
+
+# Build
+dist
+
+# Environment
+.env
+.env.*
+*.local
+
+# Editor
+.vscode
+.idea
+.DS_Store
+*.swp
+
+# Base44
+.app.json*
+.types/
+
+# Shared, non-code files: live only in the main folder (see CLAUDE.md)
+results/
+slides/
+hdr.txt
+.deploy.lock
+.dev-port
