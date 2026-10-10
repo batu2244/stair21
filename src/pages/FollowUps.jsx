@@ -187,8 +187,8 @@ export default function FollowUps({ me, notify }) {
                       <th>Priority</th>
                       <th>Next follow-up</th>
                       <th>Status</th>
-                      <th>Client confirmed</th>
-                      <th>Last contact</th>
+                      <th>Confirmed</th>
+                      <th className="fu-col-last">Last contact</th>
                       <th>Note</th>
                       <th aria-label="Actions" />
                     </tr>
@@ -210,8 +210,8 @@ export default function FollowUps({ me, notify }) {
                             <td>
                               {h.next_meeting_at ? (
                                 <>
-                                  <span className={st === "overdue" ? "danger strong" : "strong"}>{relative(h.next_meeting_at)}</span>
-                                  <span className="muted"> · {shortDay(h.next_meeting_at)}, {timeOf(h.next_meeting_at)}</span>
+                                  <div className={st === "overdue" ? "danger strong" : "strong"}>{relative(h.next_meeting_at)}</div>
+                                  <div className="muted small">{shortDay(h.next_meeting_at)}, {timeOf(h.next_meeting_at)}</div>
                                 </>
                               ) : <span className="muted">—</span>}
                             </td>
@@ -222,7 +222,7 @@ export default function FollowUps({ me, notify }) {
                                 : h.live_version > 0 ? <span className="muted">Not yet</span>
                                 : <span className="muted">Hub not shared</span>}
                             </td>
-                            <td className="muted">{formatDay(h.last_contact_at)}</td>
+                            <td className="muted fu-col-last">{formatDay(h.last_contact_at)}</td>
                             <td className="muted fu-note">{h.follow_up_note || "—"}</td>
                             <td className="num">
                               {!h.example && <button className="link small" onClick={(e) => { e.stopPropagation(); setOpen(isOpen ? null : h.id); }}>
