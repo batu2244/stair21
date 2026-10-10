@@ -1,0 +1,18 @@
+/* Share tab. Uses the theme tokens from index.css. */
+.share-list { display: flex; flex-direction: column; }
+.share-row { padding: 16px 20px; border-bottom: 1px solid var(--line); }
+.share-row:last-child { border-bottom: 0; }
+.share-row-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.share-compose { margin-top: 16px; display: flex; flex-direction: column; gap: 12px; max-width: 720px; }
+.share-compose textarea { min-height: 240px; }
+.share-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.share-link { font-size: 13px; color: var(--secondary); overflow-wrap: anywhere; }
+.share-steps { list-style: none; counter-reset: step; display: flex; flex-direction: column; gap: 10px; }
+.share-steps li { counter-increment: step; display: flex; gap: 12px; align-items: baseline; }
+.share-steps li::before {
+  content: counter(step); flex-shrink: 0;
+  width: 22px; height: 22px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--accent-soft); color: var(--accent); font-size: 12px; font-weight: 600;
+}
+.share-section + .share-section { margin-top: 20px; }

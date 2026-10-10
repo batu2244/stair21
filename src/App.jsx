@@ -3,6 +3,7 @@ import { hubs } from "@/lib/api";
 import { usePath } from "@/lib/router";
 import Shell from "@/components/Shell";
 import Hubs from "@/pages/Hubs";
+import Share from "@/pages/Share";
 import FollowUps from "@/pages/FollowUps";
 import Create from "@/pages/Create";
 import HubDetail from "@/pages/HubDetail";
@@ -39,6 +40,7 @@ function Workspace({ path, notify }) {
   if (path === "/profile") [tab, page] = ["profile", <Profile me={me} onSaved={onProfile} />];
   else if (path === "/firm") [tab, page] = ["firm", <Firm me={me} onSaved={onFirm} notify={notify} />];
   else if (path === "/hubs") [tab, page] = ["hubs", <Hubs />];
+  else if (path === "/share") [tab, page] = ["share", <Share me={me} notify={notify} />];
   else if (path === "/new") [tab, page] = ["dashboard", <Create />];
   else if (client) [tab, page] = ["dashboard", <ClientProfile key={client[1]} id={client[1]} notify={notify} />];
   else if (snap) [tab, page] = ["hubs", <Snapshot key={path} id={snap[1]} version={snap[2]} />];
