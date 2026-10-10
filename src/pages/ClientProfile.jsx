@@ -142,13 +142,15 @@ export default function ClientProfile({ id, notify }) {
             </div>
           </section>
 
-          {(p.email || p.phone) && (
+          {(p.email || p.phone || p.location || p.linkedin) && (
             <section className="panel-card">
               <div className="card-head"><h2 className="card-title">Contact</h2></div>
               <dl className="pad cp-details">
                 {p.email && (<><dt>Email</dt><dd><a className="link" href={`mailto:${p.email}`}>{p.email}</a></dd></>)}
                 {p.phone && (<><dt>Phone</dt><dd><a className="link" href={`tel:${p.phone.replace(/[^0-9+]/g, "")}`}>{p.phone}</a></dd></>)}
                 {p.location && (<><dt>Location</dt><dd>{p.location}</dd></>)}
+                {p.company && (<><dt>Company</dt><dd>{p.company}</dd></>)}
+                {p.linkedin && (<><dt>LinkedIn</dt><dd><a className="link" href={p.linkedin} target="_blank" rel="noreferrer">View profile</a></dd></>)}
                 {p.household && (<><dt>Household</dt><dd>{p.household}</dd></>)}
                 {p.client_since && (<><dt>Client since</dt><dd>{p.client_since}</dd></>)}
                 {p.risk && (<><dt>Risk profile</dt><dd>{p.risk}</dd></>)}
