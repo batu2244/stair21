@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { hubs } from "@/lib/api";
 import { usePath } from "@/lib/router";
 import Shell from "@/components/Shell";
-import Home from "@/pages/Home";
 import Hubs from "@/pages/Hubs";
 import FollowUps from "@/pages/FollowUps";
 import Create from "@/pages/Create";
@@ -37,12 +36,12 @@ function Workspace({ path, notify }) {
   const hub = path.match(/^\/hubs\/([^/]+)$/);
   if (path === "/profile") [tab, page] = ["profile", <Profile me={me} onSaved={onProfile} />];
   else if (path === "/firm") [tab, page] = ["firm", <Firm me={me} onSaved={onFirm} notify={notify} />];
-  else if (path === "/follow-ups") [tab, page] = ["followups", <FollowUps notify={notify} />];
   else if (path === "/hubs") [tab, page] = ["hubs", <Hubs />];
   else if (path === "/new") [tab, page] = ["hubs", <Create />];
   else if (snap) [tab, page] = ["hubs", <Snapshot key={path} id={snap[1]} version={snap[2]} />];
   else if (hub) [tab, page] = ["hubs", <HubDetail key={hub[1]} id={hub[1]} me={me} notify={notify} />];
-  else page = <Home me={me} />;
+  // Dashboard is the follow-up manager; /follow-ups kept so old links still work.
+  else page = <FollowUps me={me} notify={notify} />;
 
   return <Shell me={me} tab={tab}>{page}</Shell>;
 }

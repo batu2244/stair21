@@ -2,8 +2,11 @@ import { Fragment, useEffect, useState } from "react";
 import { hubs } from "@/lib/api";
 import { navigate } from "@/lib/router";
 import { fromLocalInput, toLocalInput, relative, shortDay, timeOf } from "@/lib/dates";
+import { EXAMPLE_FOLLOW_UPS } from "@/lib/example";
+import WealthBanner from "@/components/WealthBanner";
 
-// Follow-up manager: who to contact, when, and whether they've confirmed.
+// Dashboard: the follow-up manager. Who to contact, when, and whether they've confirmed.
+// Built-in example rows (h.example) are read-only and sit alongside real clients.
 
 function startOfToday() {
   const n = new Date();
@@ -28,6 +31,7 @@ const STATE = {
   none: { label: "Not scheduled", pill: "" },
 };
 const ORDER = { overdue: 0, today: 1, week: 2, later: 3, none: 4 };
+const PRIORITY = { high: { label: "High", pill: "pill-danger" }, low: { label: "Low", pill: "" } };
 
 const waitingOnClient = (h) => h.next_meeting_at && h.live_version > 0 && !h.meeting_confirmed && stateOf(h) !== "overdue";
 
@@ -106,7 +110,7 @@ function Manage({ h, onDone, notify }) {
   );
 }
 
-export default function FollowUps({ notify }) {
+export default function FollowUps({ me, notify }) {
   const [list, setList] = useState(null);
   const [filter, setFilter] = useState("all");
   const [q, setQ] = useState("");
@@ -115,7 +119,8 @@ export default function FollowUps({ notify }) {
   const load = () => hubs("listHubs").then((d) => setList(d.hubs)).catch(() => setList([]));
   useEffect(() => { load(); }, []);
 
-  const all = list || [];
+  const all = list ? [...list, ...EXAMPLE_FOLLOW_UPS] : [];
+  const firstName = (me?.profile?.name || "").split(" ")[0];
   const count = (key) => all.filter(FILTERS.find((f) => f.key === key).test).length;
   const kpis = [
     { key: "overdue", label: "Overdue", value: count("overdue"), cls: count("overdue") ? "danger" : "" },
@@ -139,8 +144,9 @@ export default function FollowUps({ notify }) {
     <main className="page">
       <div className="page-head">
         <div>
-          <div className="eyebrow">Follow-ups</div>
-          <h1 className="page-title">Who to follow up with</h1>
+          <div className="eyebrow">Dashboard</div>
+          <h1 className="page-title">Good to see you{firstName ? `, ${firstName}` : ""}.</h1>
+          <p className="subhead">Who to follow up with, and when.</p>
         </div>
       </div>
 
@@ -177,6 +183,7 @@ export default function FollowUps({ notify }) {
                 <thead>
                   <tr>
                     <th>Client</th>
+                    <th>Priority</th>
                     <th>Next follow-up</th>
                     <th>Status</th>
                     <th>Client confirmed</th>
@@ -188,11 +195,17 @@ export default function FollowUps({ notify }) {
                 <tbody>
                   {rows.map((h) => {
                     const st = stateOf(h);
-                    const isOpen = open === h.id;
+                    const isOpen = !h.example && open === h.id;
+                    const pr = PRIORITY[h.priority];
                     return (
                       <Fragment key={h.id}>
-                        <tr className={isOpen ? "open" : ""} onClick={() => setOpen(isOpen ? null : h.id)}>
-                          <td className="strong">{h.client_name}</td>
+                        <tr className={isOpen ? "open" : h.example ? "fu-example" : ""}
+                          onClick={() => !h.example && setOpen(isOpen ? null : h.id)}>
+                          <td className="strong">
+                            {h.client_name}
+                            {h.example && <span className="pill" style={{ marginLeft: 8 }}>Example</span>}
+                          </td>
+                          <td>{pr ? <span className={`pill ${pr.pill}`}>{pr.label}</span> : <span className="muted">—</span>}</td>
                           <td>
                             {h.next_meeting_at ? (
                               <>
@@ -211,14 +224,14 @@ export default function FollowUps({ notify }) {
                           <td className="muted">{formatDay(h.last_contact_at)}</td>
                           <td className="muted fu-note">{h.follow_up_note || "—"}</td>
                           <td className="num">
-                            <button className="link small" onClick={(e) => { e.stopPropagation(); setOpen(isOpen ? null : h.id); }}>
+                            {!h.example && <button className="link small" onClick={(e) => { e.stopPropagation(); setOpen(isOpen ? null : h.id); }}>
                               {isOpen ? "Close" : h.next_meeting_at ? "Manage" : "Schedule"}
-                            </button>
+                            </button>}
                           </td>
                         </tr>
                         {isOpen && (
                           <tr className="fu-manage-row">
-                            <td colSpan={7}><Manage h={h} onDone={done} notify={notify} /></td>
+                            <td colSpan={8}><Manage h={h} onDone={done} notify={notify} /></td>
                           </tr>
                         )}
                       </Fragment>
@@ -229,6 +242,8 @@ export default function FollowUps({ notify }) {
             </div>
           )}
       </section>
+
+      <WealthBanner />
     </main>
   );
 }
