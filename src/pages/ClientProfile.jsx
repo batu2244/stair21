@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { EXAMPLE_FOLLOW_UPS } from "@/lib/example";
+import { confirmExample, isExampleConfirmed } from "@/lib/exampleState";
 import { meetingDate, relative } from "@/lib/dates";
 import BackLink from "@/components/BackLink";
 import "./ClientProfile.css";
@@ -20,7 +21,7 @@ function initials(name = "") {
 // Client profile for the dashboard's example clients (real clients open their hub).
 export default function ClientProfile({ id, notify }) {
   const c = EXAMPLE_FOLLOW_UPS.find((x) => x.id === id);
-  const [confirmed, setConfirmed] = useState(!!c?.meeting_confirmed);
+  const [confirmed, setConfirmed] = useState(!!c?.meeting_confirmed || (c && isExampleConfirmed(c.id)));
 
   if (!c) {
     return (
@@ -101,7 +102,7 @@ export default function ClientProfile({ id, notify }) {
                   {confirmed ? (
                     <span className="pill pill-ok">Confirmed</span>
                   ) : (
-                    <button className="btn btn-sm" onClick={() => { setConfirmed(true); notify("Meeting confirmed"); }}>
+                    <button className="btn btn-sm" onClick={() => { confirmExample(c.id); setConfirmed(true); notify("Meeting confirmed"); }}>
                       Confirm meeting
                     </button>
                   )}
