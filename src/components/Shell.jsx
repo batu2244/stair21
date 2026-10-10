@@ -5,7 +5,6 @@ import "@/components/ProfileMenu.css";
 const TABS = [
   { key: "dashboard", label: "Dashboard", to: "/" },
   { key: "hubs", label: "Client hubs", to: "/hubs" },
-  { key: "followups", label: "Follow-ups", to: "/follow-ups" },
 ];
 
 // Settings that live behind the avatar instead of the tab bar.
