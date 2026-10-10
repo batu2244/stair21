@@ -1,5 +1,16 @@
-/* Follow-up priority badges. Uses the theme tokens from index.css.
-   Doubled class so these win over .pill regardless of stylesheet order. */
-.pill.pill-priority-high { background: var(--danger-soft); color: var(--danger); }
-.pill.pill-priority-low { background: var(--surface-3); color: var(--secondary); }
+/* Follow-up priority: a full-height colored tab on the row's left edge.
+   Uses the theme tokens from index.css. */
+.fu-row.fu-row-prio { align-items: stretch; padding-left: 0; }
+.fu-row-prio .fu-when, .fu-row-prio .fu-main { align-self: center; }
+.fu-row-prio > .pill { align-self: center; }
+.fu-prio {
+  width: 64px; flex-shrink: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  margin: -13px 0; /* fill the row's vertical padding */
+  font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+}
+.fu-prio-arrow { font-size: 10px; line-height: 1; }
+.fu-prio-high { background: var(--danger); color: #fff; }
+.fu-prio-low { background: var(--accent-soft); color: var(--accent); box-shadow: inset -1px 0 0 var(--line); }
 .fu-row .fu-main .strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@media (max-width: 480px) { .fu-prio { width: 52px; } }
