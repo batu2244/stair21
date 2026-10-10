@@ -1,12 +1,13 @@
 /* Follow-up priority: a full-height colored tab on the row's left edge.
    Uses the theme tokens from index.css. */
-.fu-row.fu-row-prio { align-items: stretch; padding-left: 0; }
-.fu-row-prio .fu-when, .fu-row-prio .fu-main { align-self: center; }
+/* Rows with a tab carry their own vertical spacing, so the tab always fills
+   the full height whatever .fu-row padding the theme uses. */
+.fu-row.fu-row-prio { align-items: stretch; padding-top: 0; padding-bottom: 0; padding-left: 0; }
+.fu-row-prio .fu-when, .fu-row-prio .fu-main { align-self: center; padding: 14px 0; }
 .fu-row-prio > .pill { align-self: center; }
 .fu-prio {
   width: 64px; flex-shrink: 0;
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
-  margin: -13px 0; /* fill the row's vertical padding */
   font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
 }
 .fu-prio-arrow { font-size: 10px; line-height: 1; }
