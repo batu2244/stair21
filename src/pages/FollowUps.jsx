@@ -225,6 +225,7 @@ export default function FollowUps({ me, notify }) {
                             onClick={() => !h.example && setOpen(isOpen ? null : h.id)}>
                             <td className="strong">
                               {h.client_name}
+                              {h.detail && <div className="muted small fu-detail">{h.detail}</div>}
                             </td>
                             <td>{pr ? <span className={`pill ${pr.pill}`}>{pr.label}</span> : <span className="muted">—</span>}</td>
                             <td>
