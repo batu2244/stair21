@@ -3,6 +3,7 @@ import { hubs } from "@/lib/api";
 import { navigate } from "@/lib/router";
 import { fromLocalInput, toLocalInput, relative, shortDay, timeOf } from "@/lib/dates";
 import { EXAMPLE_FOLLOW_UPS } from "@/lib/example";
+import ArchiveClient from "@/components/ArchiveClient";
 import { isExampleConfirmed } from "@/lib/exampleState";
 import { WithBottomBanner } from "@/components/WealthBanner";
 
@@ -119,6 +120,7 @@ function Manage({ h, onDone, notify }) {
           </button>
         )}
         <button className="link small" onClick={() => navigate(`/hubs/${h.id}`)}>Open hub ›</button>
+        <ArchiveClient hubId={h.id} name={h.client_name} onArchived={onDone} notify={notify} />
       </div>
       {h.next_meeting_at && (
         <p className="hint">Mark done records the contact. Pick a new date first to schedule the next follow-up at the same time.</p>

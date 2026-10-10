@@ -34,6 +34,10 @@
     "follow_up_note": { "type": "string", "description": "Internal note, never shown to the client" },
     "last_contact_at": { "type": "string", "format": "date-time", "description": "When the last follow-up was marked done" },
     "meeting_confirmed": { "type": "boolean", "default": false },
+    // Archived clients are hidden everywhere, but their approved versions and
+    // activity stay in the database (books and records).
+    "archived": { "type": "boolean", "default": false },
+    "archived_at": { "type": "string", "format": "date-time" },
     "meeting_confirmed_at": { "type": "string", "format": "date-time" }
   },
   "required": ["owner_key", "client_name"],
