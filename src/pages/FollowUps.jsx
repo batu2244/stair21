@@ -3,6 +3,7 @@ import { hubs } from "@/lib/api";
 import { navigate } from "@/lib/router";
 import { fromLocalInput, toLocalInput, relative, shortDay, timeOf } from "@/lib/dates";
 import { EXAMPLE_FOLLOW_UPS } from "@/lib/example";
+import { isExampleConfirmed } from "@/lib/exampleState";
 import { WithBottomBanner } from "@/components/WealthBanner";
 
 // Dashboard: the follow-up manager. Who to contact, when, and whether they've confirmed.
@@ -67,6 +68,19 @@ function Manage({ h, onDone, notify }) {
     }
   };
 
+  // The client confirmed the next meeting (e.g. by phone).
+  const confirm = async () => {
+    setBusy(true);
+    try {
+      await hubs("confirmMeeting", { hubId: h.id });
+      notify("Meeting confirmed");
+      onDone();
+    } catch (err) {
+      notify(err.message);
+      setBusy(false);
+    }
+  };
+
   // Mark done records the contact. A newly picked date becomes the next follow-up.
   const markDone = () =>
     save(
@@ -92,6 +106,9 @@ function Manage({ h, onDone, notify }) {
           onClick={() => save({}, h.next_meeting_at ? "Follow-up updated" : "Follow-up scheduled")}>
           {h.next_meeting_at ? "Save changes" : "Schedule"}
         </button>
+        {h.next_meeting_at && !h.meeting_confirmed && (
+          <button className="btn btn-sm btn-secondary" disabled={busy} onClick={confirm}>Confirm meeting</button>
+        )}
         {h.next_meeting_at && (
           <button className="btn btn-sm btn-secondary" disabled={busy} onClick={markDone}>Mark done</button>
         )}
@@ -115,33 +132,14 @@ export default function FollowUps({ me, notify }) {
   const [filter, setFilter] = useState("all");
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(null);
-  const [confirmedExamples, setConfirmedExamples] = useState(() => new Set());
-  const [confirming, setConfirming] = useState(null);
 
   const load = () => hubs("listHubs").then((d) => setList(d.hubs)).catch(() => setList([]));
   useEffect(() => { load(); }, []);
 
   const all = list
-    ? [...list, ...EXAMPLE_FOLLOW_UPS].map((h) => (confirmedExamples.has(h.id) ? { ...h, meeting_confirmed: true } : h))
+    ? [...list, ...EXAMPLE_FOLLOW_UPS].map((h) => (h.example && isExampleConfirmed(h.id) ? { ...h, meeting_confirmed: true } : h))
     : [];
 
-  // Confirm the next meeting from the dashboard (e.g. the client confirmed by phone).
-  const confirm = async (h) => {
-    if (h.example) {
-      setConfirmedExamples((s) => new Set(s).add(h.id));
-      return notify("Meeting confirmed");
-    }
-    setConfirming(h.id);
-    try {
-      await hubs("confirmMeeting", { hubId: h.id });
-      setList((l) => l.map((x) => (x.id === h.id ? { ...x, meeting_confirmed: true } : x)));
-      notify("Meeting confirmed");
-    } catch (err) {
-      notify(err.message);
-    } finally {
-      setConfirming(null);
-    }
-  };
   const firstName = (me?.profile?.name || "").split(" ")[0];
   const count = (key) => all.filter(FILTERS.find((f) => f.key === key).test).length;
   const kpis = [
@@ -239,12 +237,7 @@ export default function FollowUps({ me, notify }) {
                             <td>
                               {!h.next_meeting_at ? <span className="muted">—</span>
                                 : h.meeting_confirmed ? <span className="pill pill-ok">Confirmed</span>
-                                : (
-                                  <button className="btn btn-sm btn-secondary" disabled={confirming === h.id}
-                                    onClick={(e) => { e.stopPropagation(); confirm(h); }}>
-                                    {confirming === h.id ? "Confirming…" : "Confirm"}
-                                  </button>
-                                )}
+                                : <span className="muted">Not yet</span>}
                             </td>
                             <td className="muted fu-col-last">{formatDay(h.last_contact_at)}</td>
                             <td className="num">
