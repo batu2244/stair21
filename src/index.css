@@ -172,6 +172,24 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator { cursor: pointe
   .kpi:nth-child(n + 3) { border-top: 1px solid var(--line); }
 }
 
+/* Four-up KPI row (dashboard, follow-ups): 4 across, 2x2 on phones. */
+.kpis-4 { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 960px) {
+  .kpis-4 { grid-template-columns: repeat(4, 1fr); }
+  .kpis-4 .kpi:nth-child(4) { border-left: 1px solid var(--line); }
+  .kpis-4 .kpi:nth-child(n + 4) { border-top: 0; }
+}
+@media (max-width: 560px) {
+  .kpis-4 { grid-template-columns: repeat(2, 1fr); }
+  .kpis-4 .kpi:nth-child(odd) { border-left: 0; }
+  .kpis-4 .kpi:nth-child(n + 3) { border-top: 1px solid var(--line); }
+}
+/* KPIs that filter the list below */
+.kpi-button { background: none; border: 0; text-align: left; cursor: pointer; transition: background 0.12s; }
+.kpi-button:hover { background: var(--surface-2); }
+.kpi-button.active { background: var(--accent-soft); }
+.kpi-button.active .kpi-label { color: var(--accent); }
+
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
 @media (max-width: 860px) { .grid-2 { grid-template-columns: 1fr; } }
 
@@ -244,6 +262,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator { cursor: pointe
 .pill-draft, .status-draft { background: var(--accent-soft); color: var(--accent); }
 .pill-approved, .status-approved, .pill-ok, .tag-ok { background: var(--ok-soft); color: var(--ok); }
 .pill-warn, .tag-warn { background: var(--warn-soft); color: var(--warn); }
+.pill-danger { background: var(--danger-soft); color: var(--danger); }
 
 /* ---------- Segmented control ---------- */
 .segmented { display: inline-flex; background: var(--surface-3); border-radius: 9px; padding: 3px; flex-wrap: wrap; }
@@ -336,3 +355,21 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator { cursor: pointe
   border-radius: 50%; animation: spin 0.9s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---------- Follow-up manager ---------- */
+.btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--line-strong); box-shadow: var(--shadow-sm); }
+.btn-secondary:hover { background: var(--surface-2); }
+.fu-table th, .fu-table td { padding-left: 14px; padding-right: 14px; }
+.fu-table th:first-child, .fu-table td:first-child { padding-left: 20px; }
+.fu-table th:last-child, .fu-table td:last-child { padding-right: 20px; }
+.fu-table .fu-note { max-width: 180px; overflow: hidden; text-overflow: ellipsis; }
+.fu-table tbody tr.open { background: var(--surface-2); }
+.fu-table tbody tr.fu-manage-row { cursor: default; background: var(--surface-2); }
+.fu-table tbody tr.fu-manage-row:hover { background: var(--surface-2); }
+.fu-table tbody tr.fu-manage-row td { white-space: normal; padding-top: 4px; }
+.fu-manage { max-width: 720px; }
+.fu-manage-grid { display: grid; grid-template-columns: 240px 1fr; gap: 12px; }
+.fu-manage-grid label { display: block; }
+.fu-manage-grid .label { display: block; margin-bottom: 6px; }
+.fu-manage .input { background: var(--surface); }
+@media (max-width: 640px) { .fu-manage-grid { grid-template-columns: 1fr; } }
