@@ -196,6 +196,7 @@ export default async function (req: Request): Promise<Response> {
             meeting_confirmed: h.meeting_confirmed,
             next_meeting_at: h.next_meeting_at || "",
             follow_up_note: h.follow_up_note || "",
+            last_contact_at: h.last_contact_at || "",
             compliance_flags: h.compliance_flags || [],
             updated_date: h.updated_date,
           })),
@@ -334,14 +335,24 @@ export default async function (req: Request): Promise<Response> {
         const next_meeting_at = isoDate(body.next_meeting_at);
         const follow_up_note = str(body.follow_up_note, 300);
         const moved = next_meeting_at !== (hub.next_meeting_at || "");
+        // Marking a follow-up done records the contact; the meeting time if it has
+        // passed, otherwise now.
+        let last_contact_at: string | undefined;
+        if (body.completed === true) {
+          const held = hub.next_meeting_at && new Date(hub.next_meeting_at) < new Date();
+          last_contact_at = held ? hub.next_meeting_at : new Date().toISOString();
+          await log(hub.id, "Follow-up completed", hub.follow_up_note || "");
+        }
         await db.ClientHub.update(hub.id, {
           next_meeting_at,
           follow_up_note,
+          ...(last_contact_at ? { last_contact_at } : {}),
           // A new date needs a new confirmation from the client.
           ...(moved ? { meeting_confirmed: false } : {}),
         });
-        if (moved) await log(hub.id, next_meeting_at ? "Follow-up scheduled" : "Follow-up cleared", next_meeting_at);
-        return json({ success: true });
+        if (moved && next_meeting_at) await log(hub.id, "Follow-up scheduled", next_meeting_at);
+        if (moved && !next_meeting_at && !last_contact_at) await log(hub.id, "Follow-up cleared");
+        return json({ success: true, last_contact_at: last_contact_at || hub.last_contact_at || "" });
       }
 
       case "newVersion": {

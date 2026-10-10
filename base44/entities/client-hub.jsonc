@@ -32,6 +32,7 @@
     // Follow-up. Operational, so it can change after approval without a new version.
     "next_meeting_at": { "type": "string", "format": "date-time", "description": "Next follow-up meeting" },
     "follow_up_note": { "type": "string", "description": "Internal note, never shown to the client" },
+    "last_contact_at": { "type": "string", "format": "date-time", "description": "When the last follow-up was marked done" },
     "meeting_confirmed": { "type": "boolean", "default": false },
     "meeting_confirmed_at": { "type": "string", "format": "date-time" }
   },

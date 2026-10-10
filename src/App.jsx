@@ -37,7 +37,7 @@ function Workspace({ path, notify }) {
   const hub = path.match(/^\/hubs\/([^/]+)$/);
   if (path === "/profile") [tab, page] = ["profile", <Profile me={me} onSaved={onProfile} />];
   else if (path === "/firm") [tab, page] = ["firm", <Firm me={me} onSaved={onFirm} notify={notify} />];
-  else if (path === "/follow-ups") [tab, page] = ["followups", <FollowUps />];
+  else if (path === "/follow-ups") [tab, page] = ["followups", <FollowUps notify={notify} />];
   else if (path === "/hubs") [tab, page] = ["hubs", <Hubs />];
   else if (path === "/new") [tab, page] = ["hubs", <Create />];
   else if (snap) [tab, page] = ["hubs", <Snapshot key={path} id={snap[1]} version={snap[2]} />];
