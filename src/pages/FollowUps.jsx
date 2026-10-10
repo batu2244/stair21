@@ -221,11 +221,10 @@ export default function FollowUps({ me, notify }) {
                       const pr = PRIORITY[h.priority];
                       return (
                         <Fragment key={h.id}>
-                          <tr className={isOpen ? "open" : h.example ? "fu-example" : ""}
-                            onClick={() => !h.example && setOpen(isOpen ? null : h.id)}>
+                          <tr className={isOpen ? "open" : ""}
+                            onClick={() => (h.example ? navigate(`/clients/${h.id}`) : setOpen(isOpen ? null : h.id))}>
                             <td className="strong">
                               {h.client_name}
-                              {h.detail && <div className="muted small fu-detail">{h.detail}</div>}
                             </td>
                             <td>{pr ? <span className={`pill ${pr.pill}`}>{pr.label}</span> : <span className="muted">—</span>}</td>
                             <td>

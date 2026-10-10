@@ -1,0 +1,17 @@
+/* Client profile. Uses the theme tokens from index.css. */
+.cp-head { display: flex; align-items: center; gap: 18px; margin-bottom: 24px; }
+.cp-avatar {
+  width: 64px; height: 64px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--accent-soft); color: var(--accent);
+  font-size: 22px; font-weight: 600;
+}
+.cp-tags { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.cp-fact { font-size: 22px; }
+.cp-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; align-items: start; }
+.cp-grid .panel-card { border-radius: 18px; }
+.cp-why { display: flex; flex-direction: column; gap: 18px; }
+.cp-why .label { display: block; margin-bottom: 4px; }
+.cp-big { font-size: 17px; font-weight: 500; }
+.cp-when { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; }
+@media (max-width: 860px) { .cp-grid { grid-template-columns: 1fr; } }

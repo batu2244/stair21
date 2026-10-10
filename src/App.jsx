@@ -9,6 +9,7 @@ import HubDetail from "@/pages/HubDetail";
 import Snapshot from "@/pages/Snapshot";
 import Profile from "@/pages/Profile";
 import Firm from "@/pages/Firm";
+import ClientProfile from "@/pages/ClientProfile";
 import ClientView from "@/pages/ClientView";
 
 // Advisor side: no login. Asks for a profile the first time.
@@ -34,10 +35,12 @@ function Workspace({ path, notify }) {
   let page;
   const snap = path.match(/^\/hubs\/([^/]+)\/v\/(\d+)$/);
   const hub = path.match(/^\/hubs\/([^/]+)$/);
+  const client = path.match(/^\/clients\/([^/]+)$/);
   if (path === "/profile") [tab, page] = ["profile", <Profile me={me} onSaved={onProfile} />];
   else if (path === "/firm") [tab, page] = ["firm", <Firm me={me} onSaved={onFirm} notify={notify} />];
   else if (path === "/hubs") [tab, page] = ["hubs", <Hubs />];
   else if (path === "/new") [tab, page] = ["dashboard", <Create />];
+  else if (client) [tab, page] = ["dashboard", <ClientProfile key={client[1]} id={client[1]} notify={notify} />];
   else if (snap) [tab, page] = ["hubs", <Snapshot key={path} id={snap[1]} version={snap[2]} />];
   else if (hub) [tab, page] = ["hubs", <HubDetail key={hub[1]} id={hub[1]} me={me} notify={notify} />];
   // Dashboard is the follow-up manager; /follow-ups kept so old links still work.
