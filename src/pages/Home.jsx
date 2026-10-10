@@ -1,10 +1,9 @@
 import { navigate } from "@/lib/router";
 import { EXAMPLE_HUB } from "@/lib/example";
 import { useHubs, groupFollowUps } from "@/lib/useHubs";
-import HubTable from "@/components/HubTable";
 import FollowUpList from "@/components/FollowUpList";
 
-// Dashboard: KPIs, what needs attention, and recent activity.
+// Dashboard: KPIs and what needs attention.
 export default function Home({ me }) {
   const list = useHubs();
   const all = list || [];
@@ -91,14 +90,6 @@ export default function Home({ me }) {
         </section>
       </div>
 
-      <section className="panel-card" style={{ marginTop: 20 }}>
-        <div className="card-head">
-          <h2 className="card-title">Recently updated</h2>
-          <button className="link small" onClick={() => navigate("/hubs")}>View all</button>
-        </div>
-        {loading ? <p className="muted pad">Loading…</p>
-          : <HubTable items={all.slice(0, 6)} empty="No client hubs yet. Create one after your next meeting." />}
-      </section>
     </main>
   );
 }
