@@ -2,6 +2,7 @@ import { navigate } from "@/lib/router";
 import { EXAMPLE_HUB } from "@/lib/example";
 import { useHubs, groupFollowUps } from "@/lib/useHubs";
 import FollowUpList from "@/components/FollowUpList";
+import WealthBanner from "@/components/WealthBanner";
 
 // Dashboard: KPIs and what needs attention.
 export default function Home({ me }) {
@@ -88,6 +89,7 @@ export default function Home({ me }) {
         </section>
       </div>
 
+      <WealthBanner />
     </main>
   );
 }
