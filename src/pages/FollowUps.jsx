@@ -189,7 +189,6 @@ export default function FollowUps({ me, notify }) {
                       <th>Status</th>
                       <th>Confirmed</th>
                       <th className="fu-col-last">Last contact</th>
-                      <th>Note</th>
                       <th aria-label="Actions" />
                     </tr>
                   </thead>
@@ -223,7 +222,6 @@ export default function FollowUps({ me, notify }) {
                                 : <span className="muted">Hub not shared</span>}
                             </td>
                             <td className="muted fu-col-last">{formatDay(h.last_contact_at)}</td>
-                            <td className="muted fu-note">{h.follow_up_note || "—"}</td>
                             <td className="num">
                               {!h.example && <button className="link small" onClick={(e) => { e.stopPropagation(); setOpen(isOpen ? null : h.id); }}>
                                 {isOpen ? "Close" : h.next_meeting_at ? "Manage" : "Schedule"}
@@ -232,7 +230,7 @@ export default function FollowUps({ me, notify }) {
                           </tr>
                           {isOpen && (
                             <tr className="fu-manage-row">
-                              <td colSpan={8}><Manage h={h} onDone={done} notify={notify} /></td>
+                              <td colSpan={7}><Manage h={h} onDone={done} notify={notify} /></td>
                             </tr>
                           )}
                         </Fragment>

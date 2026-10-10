@@ -372,11 +372,9 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator { cursor: pointe
 .fu-table th, .fu-table td { padding-left: 14px; padding-right: 14px; }
 .fu-table th:first-child, .fu-table td:first-child { padding-left: 20px; }
 .fu-table th:last-child, .fu-table td:last-child { padding-right: 20px; }
-.fu-table .fu-note { max-width: 200px; overflow: hidden; text-overflow: ellipsis; }
 /* Narrower screens: drop Last contact and tighten the note so the table fits the card. */
 @media (max-width: 1180px) {
   .fu-table .fu-col-last { display: none; }
-  .fu-table .fu-note { max-width: 160px; }
 }
 .fu-table tbody tr.open { background: var(--surface-2); }
 .fu-table tbody tr.fu-example { cursor: default; }
