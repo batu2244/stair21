@@ -5,7 +5,7 @@ import "./WealthBanner.css";
 // Pure SVG, so it stays sharp and needs no image hosting.
 export default function WealthBanner() {
   return (
-    <section className="wealth-banner" aria-label="Client Hubs">
+    <footer className="wealth-banner" aria-label="Client Hubs">
       <svg className="wb-art" viewBox="0 0 1200 340" preserveAspectRatio="xMaxYMax slice" aria-hidden="true">
         <defs>
           <linearGradient id="wb-sky" x1="0" y1="0" x2="1" y2="1">
@@ -57,8 +57,8 @@ export default function WealthBanner() {
         <path d="M600 340 C 720 300, 860 296, 980 318 S 1140 300, 1200 306 L1200 340 Z" fill="#93c5fd" />
 
         {/* Grain over everything */}
-        <rect width="1200" height="340" filter="url(#wb-grain)" opacity="0.35" style={{ mixBlendMode: "overlay" }} />
-        <rect width="1200" height="340" filter="url(#wb-grain)" opacity="0.08" />
+        <rect width="1200" height="340" filter="url(#wb-grain)" opacity="0.6" style={{ mixBlendMode: "overlay" }} />
+        <rect width="1200" height="340" filter="url(#wb-grain)" opacity="0.12" />
       </svg>
 
       <div className="wb-copy">
@@ -66,6 +66,17 @@ export default function WealthBanner() {
         <h2 className="wb-title">Wealth, made clear.</h2>
         <p className="wb-text">Every client gets one plan in plain words, approved by compliance and easy to come back to.</p>
       </div>
-    </section>
+    </footer>
+  );
+}
+
+// Page wrapper that pins the banner to the bottom of the screen, full width.
+// Usage: <WithBottomBanner><main className="page">…</main></WithBottomBanner>
+export function WithBottomBanner({ children }) {
+  return (
+    <div className="home-layout">
+      <div className="home-page-wrap">{children}</div>
+      <WealthBanner />
+    </div>
   );
 }
