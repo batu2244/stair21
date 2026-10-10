@@ -21,8 +21,10 @@ export default function FollowUpList({ items, overdue = false }) {
               <div className="muted small">{shortDay(h.next_meeting_at)} · {timeOf(h.next_meeting_at)}</div>
             </div>
             <div className="fu-main">
-              <div className="strong">{h.example ? `Example · ${h.client_name}` : h.client_name}</div>
-              {h.follow_up_note && <div className="muted small">{h.follow_up_note}</div>}
+              <div className="strong">{h.client_name}</div>
+              {(h.example || h.follow_up_note) && (
+                <div className="muted small">{[h.example && "Example", h.follow_up_note].filter(Boolean).join(" · ")}</div>
+              )}
             </div>
             {p && <span className={`pill ${p.className}`}>{p.label}</span>}
             <span className={`pill ${h.meeting_confirmed ? "pill-ok" : ""}`}>

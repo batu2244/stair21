@@ -1,5 +1,5 @@
 import { navigate } from "@/lib/router";
-import { EXAMPLE_HUB } from "@/lib/example";
+import { EXAMPLE_HUB, EXAMPLE_FOLLOW_UPS } from "@/lib/example";
 import { useHubs, groupFollowUps } from "@/lib/useHubs";
 import FollowUpList from "@/components/FollowUpList";
 
@@ -45,11 +45,12 @@ export default function Home({ me }) {
             <button className="link small" onClick={() => navigate("/follow-ups")}>View all</button>
           </div>
           {loading ? <p className="muted pad">Loading…</p>
-            : upcoming.length === 0 ? <p className="muted pad">Nothing in the next 7 days.</p>
             : (
               <>
                 {fu.overdue.length > 0 && <FollowUpList items={fu.overdue} overdue />}
                 {fu.week.length > 0 && <FollowUpList items={fu.week} />}
+                {upcoming.length > 0 && <div className="card-foot" />}
+                <FollowUpList items={EXAMPLE_FOLLOW_UPS} />
               </>
             )}
         </section>
