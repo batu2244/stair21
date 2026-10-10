@@ -87,7 +87,7 @@ export default function Shell({ me, tab, children }) {
             ))}
           </nav>
           <div className="appbar-right">
-            <button className="btn btn-sm" onClick={() => navigate("/new")}>New client hub</button>
+            <button className="btn btn-sm" onClick={() => navigate("/new")}>Add Client</button>
             <ProfileMenu me={me} tab={tab} />
           </div>
         </div>
