@@ -115,11 +115,33 @@ export default function FollowUps({ me, notify }) {
   const [filter, setFilter] = useState("all");
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(null);
+  const [confirmedExamples, setConfirmedExamples] = useState(() => new Set());
+  const [confirming, setConfirming] = useState(null);
 
   const load = () => hubs("listHubs").then((d) => setList(d.hubs)).catch(() => setList([]));
   useEffect(() => { load(); }, []);
 
-  const all = list ? [...list, ...EXAMPLE_FOLLOW_UPS] : [];
+  const all = list
+    ? [...list, ...EXAMPLE_FOLLOW_UPS].map((h) => (confirmedExamples.has(h.id) ? { ...h, meeting_confirmed: true } : h))
+    : [];
+
+  // Confirm the next meeting from the dashboard (e.g. the client confirmed by phone).
+  const confirm = async (h) => {
+    if (h.example) {
+      setConfirmedExamples((s) => new Set(s).add(h.id));
+      return notify("Meeting confirmed");
+    }
+    setConfirming(h.id);
+    try {
+      await hubs("confirmMeeting", { hubId: h.id });
+      setList((l) => l.map((x) => (x.id === h.id ? { ...x, meeting_confirmed: true } : x)));
+      notify("Meeting confirmed");
+    } catch (err) {
+      notify(err.message);
+    } finally {
+      setConfirming(null);
+    }
+  };
   const firstName = (me?.profile?.name || "").split(" ")[0];
   const count = (key) => all.filter(FILTERS.find((f) => f.key === key).test).length;
   const kpis = [
@@ -218,8 +240,12 @@ export default function FollowUps({ me, notify }) {
                             <td>
                               {!h.next_meeting_at ? <span className="muted">—</span>
                                 : h.meeting_confirmed ? <span className="pill pill-ok">Confirmed</span>
-                                : h.live_version > 0 ? <span className="muted">Not yet</span>
-                                : <span className="muted">Hub not shared</span>}
+                                : (
+                                  <button className="btn btn-sm btn-secondary" disabled={confirming === h.id}
+                                    onClick={(e) => { e.stopPropagation(); confirm(h); }}>
+                                    {confirming === h.id ? "Confirming…" : "Confirm"}
+                                  </button>
+                                )}
                             </td>
                             <td className="muted fu-col-last">{formatDay(h.last_contact_at)}</td>
                             <td className="num">
