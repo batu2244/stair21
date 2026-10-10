@@ -49,7 +49,7 @@ function daysFromNow(days, hour) {
   return d.toISOString();
 }
 
-// Built-in example follow-ups for the dashboard: one urgent, one routine.
+// Built-in example follow-ups for the dashboard: a mix of urgent and routine, soonest first.
 export const EXAMPLE_FOLLOW_UPS = [
   {
     id: "example-high",
@@ -62,6 +62,16 @@ export const EXAMPLE_FOLLOW_UPS = [
     meeting_confirmed: false,
   },
   {
+    id: "example-high-2",
+    example: true,
+    priority: "high",
+    client_name: "Linda Patel",
+    follow_up_note: "RMD deadline: withdrawal not set up yet. Confirm amount and account.",
+    next_meeting_at: daysFromNow(2, 11),
+    live_version: 1,
+    meeting_confirmed: true,
+  },
+  {
     id: "example-low",
     example: true,
     priority: "low",
@@ -70,5 +80,15 @@ export const EXAMPLE_FOLLOW_UPS = [
     next_meeting_at: daysFromNow(5, 14),
     live_version: 1,
     meeting_confirmed: true,
+  },
+  {
+    id: "example-low-2",
+    example: true,
+    priority: "low",
+    client_name: "Robert Nguyen",
+    follow_up_note: "Send updated beneficiary forms after the wedding",
+    next_meeting_at: daysFromNow(6, 16),
+    live_version: 0,
+    meeting_confirmed: false,
   },
 ];
