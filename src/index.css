@@ -3,14 +3,14 @@
 /* Dark, data-forward theme in the spirit of Addepar: deep forest-green surfaces,
    hairline dividers, compact type, one emerald accent. */
 :root {
-  --bg: #08130f;
-  --surface: #0e1d17;
-  --surface-2: #14281f;
-  --surface-3: #1b3428;
-  --line: rgba(255, 255, 255, 0.08);
-  --line-strong: rgba(255, 255, 255, 0.14);
+  --bg: #0b2018;
+  --surface: #112b21;
+  --surface-2: #17362a;
+  --surface-3: #1f4334;
+  --line: rgba(214, 255, 232, 0.09);
+  --line-strong: rgba(214, 255, 232, 0.16);
   --text: #e7efe9;
-  --secondary: #8ea397;
+  --secondary: #93ad9f;
   --accent: #2fa774;
   --accent-hover: #38bb83;
   --accent-soft: rgba(47, 167, 116, 0.16);
@@ -41,7 +41,7 @@ img { display: block; }
 /* ---------- App bar with tabs ---------- */
 .appbar {
   position: sticky; top: 0; z-index: 10;
-  background: rgba(8, 19, 15, 0.92);
+  background: rgba(11, 32, 24, 0.92);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--line);
 }
