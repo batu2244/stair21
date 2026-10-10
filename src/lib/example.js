@@ -40,3 +40,35 @@ export const EXAMPLE_HUB = {
   version: 1,
   approved_at: "2026-10-01T12:00:00.000Z",
 };
+
+// Days from today at a given hour, so the examples always sit inside the 7-day window.
+function daysFromNow(days, hour) {
+  const d = new Date();
+  d.setDate(d.getDate() + days);
+  d.setHours(hour, 0, 0, 0);
+  return d.toISOString();
+}
+
+// Built-in example follow-ups for the dashboard: one urgent, one routine.
+export const EXAMPLE_FOLLOW_UPS = [
+  {
+    id: "example-high",
+    example: true,
+    priority: "high",
+    client_name: "David Kim",
+    follow_up_note: "Market drop: client asked to sell everything. Call before he acts.",
+    next_meeting_at: daysFromNow(1, 9),
+    live_version: 1,
+    meeting_confirmed: false,
+  },
+  {
+    id: "example-low",
+    example: true,
+    priority: "low",
+    client_name: "Emily Carter",
+    follow_up_note: "Routine check-in on monthly savings plan",
+    next_meeting_at: daysFromNow(5, 14),
+    live_version: 1,
+    meeting_confirmed: true,
+  },
+];
