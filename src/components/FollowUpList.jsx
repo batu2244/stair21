@@ -8,7 +8,7 @@ const PRIORITY = {
 };
 
 // Follow-up rows: when, who, internal note, priority, client confirmation.
-// Example rows (h.example) open the built-in example hub.
+// Example rows (h.example) open the follow-up manager.
 export default function FollowUpList({ items, overdue = false }) {
   return (
     <div className="list">
@@ -16,7 +16,7 @@ export default function FollowUpList({ items, overdue = false }) {
         const p = PRIORITY[h.priority];
         return (
           <button className={`fu-row${p ? " fu-row-prio" : ""}`} key={h.id}
-            onClick={() => navigate(h.example ? "/c/example" : `/hubs/${h.id}`)}>
+            onClick={() => navigate(h.example ? "/follow-ups" : `/hubs/${h.id}`)}>
             {p && (
               <span className={`fu-prio ${p.className}`} aria-label={`${p.label} priority`}>
                 <span className="fu-prio-label">{p.label}</span>
