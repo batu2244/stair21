@@ -184,6 +184,16 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator { cursor: pointe
   .kpis-4 .kpi:nth-child(odd) { border-left: 0; }
   .kpis-4 .kpi:nth-child(n + 3) { border-top: 1px solid var(--line); }
 }
+/* Three-up KPI row (dashboard): stacks on phones. */
+.kpis-3 { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 960px) {
+  .kpis-3 .kpi:nth-child(n + 4) { border-top: 0; }
+}
+@media (max-width: 560px) {
+  .kpis-3 { grid-template-columns: 1fr; }
+  .kpis-3 .kpi { border-left: 0 !important; }
+  .kpis-3 .kpi + .kpi { border-top: 1px solid var(--line); }
+}
 /* KPIs that filter the list below */
 .kpi-button { background: none; border: 0; text-align: left; cursor: pointer; transition: background 0.12s; }
 .kpi-button:hover { background: var(--surface-2); }

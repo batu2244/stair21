@@ -1,4 +1,3 @@
-import { navigate } from "@/lib/router";
 import "./WealthBanner.css";
 
 // Dashboard footer banner: grainy blue gradient with a calm, rounded
@@ -66,7 +65,6 @@ export default function WealthBanner() {
         <div className="wb-eyebrow">Client Hubs</div>
         <h2 className="wb-title">Wealth, made clear.</h2>
         <p className="wb-text">Every client gets one plan in plain words, approved by compliance and easy to come back to.</p>
-        <button className="wb-link" onClick={() => navigate("/c/example")}>See what clients receive ›</button>
       </div>
     </section>
   );
