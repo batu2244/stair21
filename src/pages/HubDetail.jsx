@@ -34,7 +34,7 @@ export default function HubDetail({ id, me, notify }) {
   useEffect(() => { load(); }, [load]);
 
   if (missing) {
-    return <main className="screen"><div className="topbar"><BackLink to="/hubs" label="Client hubs" /></div><p className="muted">Hub not found.</p></main>;
+    return <main className="screen"><div className="topbar"><BackLink to="/hubs" label="Client Hub" /></div><p className="muted">Hub not found.</p></main>;
   }
   if (!data) return <div className="spinner" />;
 
@@ -133,7 +133,7 @@ export default function HubDetail({ id, me, notify }) {
   return (
     <main className="screen">
       <div className="topbar">
-        <BackLink to="/hubs" label="Client hubs" />
+        <BackLink to="/hubs" label="Client Hub" />
         <span className={`status status-${hub.status}`}>{STATUS[hub.status]}</span>
       </div>
 
