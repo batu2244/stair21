@@ -166,7 +166,7 @@ export default async function (req: Request): Promise<Response> {
     const loadHub = async (id: unknown) => {
       if (typeof id !== "string" || !id) return null;
       const hub = await db.ClientHub.get(id).catch(() => null);
-      return hub && hub.owner_key === owner_key ? hub : null;
+      return hub && hub.owner_key === owner_key && !hub.archived ? hub : null;
     };
     const notFound = () => json({ error: "Not found" }, 404);
 
@@ -186,7 +186,7 @@ export default async function (req: Request): Promise<Response> {
       }
 
       case "listHubs": {
-        const hubs = await db.ClientHub.filter({ owner_key }, "-updated_date", 500);
+        const hubs = (await db.ClientHub.filter({ owner_key }, "-updated_date", 500)).filter((h: any) => !h.archived);
         return json({
           hubs: hubs.map((h: any) => ({
             id: h.id,
@@ -365,6 +365,18 @@ export default async function (req: Request): Promise<Response> {
           await db.ClientHub.update(hub.id, { meeting_confirmed: true, meeting_confirmed_at: new Date().toISOString() });
           await log(hub.id, "Meeting confirmed by advisor", hub.next_meeting_at);
         }
+        return json({ success: true });
+      }
+
+      case "archiveHub": {
+        // Hide the client and switch off its share links. Approved versions and the
+        // activity log are kept for books and records.
+        const hub = await loadHub(body.hubId);
+        if (!hub) return notFound();
+        const links = await db.ShareLink.filter({ hub_id: hub.id }, "-created_date", 100);
+        await Promise.all(links.filter((l: any) => !l.revoked).map((l: any) => db.ShareLink.update(l.id, { revoked: true })));
+        await db.ClientHub.update(hub.id, { archived: true, archived_at: new Date().toISOString() });
+        await log(hub.id, "Client archived", "Share links revoked; approved versions kept");
         return json({ success: true });
       }
 

@@ -27,7 +27,7 @@ export default async function (req: Request): Promise<Response> {
     }
 
     const hub = await db.ClientHub.get(link.hub_id).catch(() => null);
-    if (!hub?.live_version) return json({ error: "unavailable" }, 404);
+    if (!hub?.live_version || hub.archived) return json({ error: "unavailable" }, 404);
 
     if (action === "confirm") {
       if (!hub.meeting_confirmed) {

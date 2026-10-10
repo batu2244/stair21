@@ -1,0 +1,6 @@
+/* Uses the theme tokens from index.css. */
+.archive-link { color: var(--danger); }
+.archive-link:hover { color: var(--danger); }
+.archive-confirm { display: inline-flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.btn.btn-danger { background: var(--danger); }
+.btn.btn-danger:hover { background: var(--danger); filter: brightness(0.92); }
