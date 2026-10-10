@@ -1,0 +1,5 @@
+/* Follow-up priority badges. Uses the theme tokens from index.css.
+   Doubled class so these win over .pill regardless of stylesheet order. */
+.pill.pill-priority-high { background: var(--danger-soft); color: var(--danger); }
+.pill.pill-priority-low { background: var(--surface-3); color: var(--secondary); }
+.fu-row .fu-main .strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
