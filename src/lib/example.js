@@ -52,6 +52,27 @@ function daysFromNow(days, hour) {
 // Built-in example follow-ups for the dashboard: a mix of urgent and routine, soonest first.
 export const EXAMPLE_FOLLOW_UPS = [
   {
+    // Real prospect added from his public LinkedIn profile (Bright Data scrape).
+    // Only public facts; no invented contact or financial details.
+    id: "client-stonny-l",
+    example: true,
+    client_name: "Stonny L.",
+    follow_up_note: "Intro call: new prospect from LinkedIn",
+    next_meeting_at: daysFromNow(2, 10),
+    live_version: 0,
+    meeting_confirmed: false,
+    profile: {
+      situation: "Founder of VenueHopper in New York. NYU 2019–2023. Runs Ship & Drink founder build nights; VenueHopper won first place at NYU's Berkley Center venture competition.",
+      action: "Intro call: congratulate him on the NYU win, learn his plans for the company and his personal finances as a young founder",
+      company: "VenueHopper (Founder)",
+      location: "New York, NY",
+      linkedin: "https://www.linkedin.com/in/stonnyliu/",
+      activity: [
+        { at: daysFromNow(0, 9), text: "Added as a prospect from LinkedIn" },
+      ],
+    },
+  },
+  {
     id: "example-high-3",
     example: true,
     priority: "high",
