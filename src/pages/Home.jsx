@@ -16,8 +16,6 @@ export default function Home({ me }) {
     { label: "Client hubs", value: all.length },
     { label: "Live", value: all.filter((h) => h.live_version > 0).length },
     { label: "Awaiting sign-off", value: drafts.length, warn: drafts.length > 0 },
-    { label: "Follow-ups · 7 days", value: fu.week.length },
-    { label: "Overdue follow-ups", value: fu.overdue.length, danger: fu.overdue.length > 0 },
     { label: "Meetings confirmed", value: all.filter((h) => h.meeting_confirmed).length },
   ];
   const upcoming = [...fu.overdue, ...fu.week];
@@ -31,7 +29,7 @@ export default function Home({ me }) {
         </div>
       </div>
 
-      <div className="kpis">
+      <div className="kpis kpis-4">
         {kpis.map((k) => (
           <div className="kpi" key={k.label}>
             <div className="kpi-label">{k.label}</div>
