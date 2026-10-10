@@ -1,0 +1,19 @@
+/* Top-right avatar menu: Profile and Firm. Uses the theme tokens from index.css. */
+.profile-menu { position: relative; }
+.profile-menu .avatar-sm.open { box-shadow: 0 0 0 2px var(--accent); }
+.profile-menu-panel {
+  position: absolute; top: calc(100% + 8px); right: 0; z-index: 20;
+  min-width: 220px; padding: 6px;
+  background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--radius);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+}
+.profile-menu-head { padding: 10px 12px 12px; border-bottom: 1px solid var(--line); margin-bottom: 6px; }
+.profile-menu-name { font-size: 14px; font-weight: 600; }
+.profile-menu-sub { font-size: 13px; color: var(--secondary); margin-top: 2px; }
+.profile-menu-item {
+  display: block; width: 100%; text-align: left;
+  background: none; border: 0; border-radius: 6px; cursor: pointer;
+  color: var(--text); font-size: 14px; padding: 9px 12px;
+}
+.profile-menu-item:hover, .profile-menu-item:focus-visible { background: var(--surface-2); outline: none; }
+.profile-menu-item.active { color: var(--accent); }
