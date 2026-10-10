@@ -46,7 +46,6 @@ export default function WealthBanner() {
       <div className="wb-copy">
         <div className="wb-eyebrow">ClientHub</div>
         <h2 className="wb-title">Wealth, made clear.</h2>
-        <p className="wb-text">Every client gets one plan in plain words, approved by compliance and easy to come back to.</p>
       </div>
     </footer>
   );

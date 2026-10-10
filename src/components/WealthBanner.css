@@ -38,7 +38,6 @@
 .wb-copy > * { max-width: 440px; }
 .wb-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #bfdbfe; }
 .wb-title { font-size: 28px; line-height: 1.15; font-weight: 700; letter-spacing: -0.025em; margin-top: 8px; }
-.wb-text { color: #dbeafe; margin-top: 10px; font-size: 16px; }
 
 /* Phones: copy on top, the scene below it. */
 @media (max-width: 720px) {
