@@ -32,17 +32,17 @@ function promptFor(i: { client_name: string; goals_input: string; meeting_notes:
 INPUTS (the only facts you may use):
 - Client name: ${i.client_name}
 - Goals (one per line):
-${i.goals_input}
+${i.goals_input || "(not given separately: take them from the meeting notes)"}
 - Meeting notes:
 ${i.meeting_notes}
-- What happens next: ${i.next_step}
+- What happens next: ${i.next_step || "(not given separately: take it from the meeting notes)"}
 
 WRITE:
 - first_name: the client's first name.
-- goals: the client's goals from the input, one short plain line each. Same goals, no new ones.
+- goals: the client's goals as stated in the inputs, one short plain line each (1 to 4). Never invent a goal that isn't there.
 - plan_summary: "Your plan, in plain words". 3 to 4 short sentences that explain the approach discussed in the notes and why it fits the goals. Only what the notes say.
 - recap: "What we talked about". Exactly 2 short sentences addressed to the client as "you".
-- steps: "Your next steps". 2 to 4 short checklist items that come from "What happens next" and the notes.
+- steps: "Your next steps". 1 to 4 short checklist items that come from "What happens next" or the notes. If the notes name no next step, write one: "We will be in touch to set up our next conversation."
 - readings: "Worth reading". Exactly 2 short general explainers of concepts named in the inputs. Plain title, 2–3 sentence body, general terms only.
 
 RULES:
@@ -233,8 +233,9 @@ export default async function (req: Request): Promise<Response> {
           meeting_notes: str(body.meeting_notes, 6000),
           next_step: str(body.next_step, 500),
         };
-        if (!inputs.client_name || !inputs.goals_input || !inputs.meeting_notes || !inputs.next_step) {
-          return json({ error: "All fields are required" }, 400);
+        // Only the name and notes are required; the AI takes goals and next steps from the notes.
+        if (!inputs.client_name || !inputs.meeting_notes) {
+          return json({ error: "Add the client's name and your notes" }, 400);
         }
         const firm = await getFirm();
         let written: any;
@@ -353,6 +354,18 @@ export default async function (req: Request): Promise<Response> {
         if (moved && next_meeting_at) await log(hub.id, "Follow-up scheduled", next_meeting_at);
         if (moved && !next_meeting_at && !last_contact_at) await log(hub.id, "Follow-up cleared");
         return json({ success: true, last_contact_at: last_contact_at || hub.last_contact_at || "" });
+      }
+
+      case "confirmMeeting": {
+        // The advisor confirms on the client's behalf (e.g. they confirmed by phone).
+        const hub = await loadHub(body.hubId);
+        if (!hub) return notFound();
+        if (!hub.next_meeting_at) return json({ error: "Schedule a follow-up first" }, 409);
+        if (!hub.meeting_confirmed) {
+          await db.ClientHub.update(hub.id, { meeting_confirmed: true, meeting_confirmed_at: new Date().toISOString() });
+          await log(hub.id, "Meeting confirmed by advisor", hub.next_meeting_at);
+        }
+        return json({ success: true });
       }
 
       case "newVersion": {
