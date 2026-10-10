@@ -37,7 +37,7 @@ function Workspace({ path, notify }) {
   if (path === "/profile") [tab, page] = ["profile", <Profile me={me} onSaved={onProfile} />];
   else if (path === "/firm") [tab, page] = ["firm", <Firm me={me} onSaved={onFirm} notify={notify} />];
   else if (path === "/hubs") [tab, page] = ["hubs", <Hubs />];
-  else if (path === "/new") [tab, page] = ["hubs", <Create />];
+  else if (path === "/new") [tab, page] = ["dashboard", <Create />];
   else if (snap) [tab, page] = ["hubs", <Snapshot key={path} id={snap[1]} version={snap[2]} />];
   else if (hub) [tab, page] = ["hubs", <HubDetail key={hub[1]} id={hub[1]} me={me} notify={notify} />];
   // Dashboard is the follow-up manager; /follow-ups kept so old links still work.
