@@ -1,0 +1,3 @@
+/* Follow-up priority badges. Uses the theme tokens from index.css. */
+.pill-priority-high { background: var(--danger-soft); color: var(--danger); }
+.pill-priority-low { background: var(--surface-3); color: var(--secondary); }
