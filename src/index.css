@@ -152,53 +152,34 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator { cursor: pointe
 
 /* ---------- KPIs and cards ---------- */
 .kpis {
-  display: grid; grid-template-columns: repeat(6, 1fr);
-  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+  margin-bottom: 24px;
+}
+/* Each number is its own soft, rounded card. */
+.kpi {
+  padding: 20px 22px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 18px;
   box-shadow: var(--shadow-md);
-  margin-bottom: 20px;
 }
-.kpi { padding: 20px 22px; }
-.kpi + .kpi { border-left: 1px solid var(--line); }
 .kpi-value { font-size: 28px; font-weight: 600; letter-spacing: -0.025em; margin-top: 6px; }
-@media (max-width: 960px) {
-  .kpis { grid-template-columns: repeat(3, 1fr); }
-  .kpi:nth-child(4) { border-left: 0; }
-  .kpi:nth-child(n + 4) { border-top: 1px solid var(--line); }
-}
-@media (max-width: 560px) {
-  .kpis { grid-template-columns: repeat(2, 1fr); }
-  .kpi:nth-child(odd) { border-left: 0; }
-  .kpi:nth-child(4) { border-left: 1px solid var(--line); }
-  .kpi:nth-child(n + 3) { border-top: 1px solid var(--line); }
-}
-
-/* Four-up KPI row (dashboard, follow-ups): 4 across, 2x2 on phones. */
 .kpis-4 { grid-template-columns: repeat(4, 1fr); }
-@media (max-width: 960px) {
-  .kpis-4 { grid-template-columns: repeat(4, 1fr); }
-  .kpis-4 .kpi:nth-child(4) { border-left: 1px solid var(--line); }
-  .kpis-4 .kpi:nth-child(n + 4) { border-top: 0; }
-}
-@media (max-width: 560px) {
-  .kpis-4 { grid-template-columns: repeat(2, 1fr); }
-  .kpis-4 .kpi:nth-child(odd) { border-left: 0; }
-  .kpis-4 .kpi:nth-child(n + 3) { border-top: 1px solid var(--line); }
-}
-/* Three-up KPI row (dashboard): stacks on phones. */
 .kpis-3 { grid-template-columns: repeat(3, 1fr); }
-@media (max-width: 960px) {
-  .kpis-3 .kpi:nth-child(n + 4) { border-top: 0; }
+@media (max-width: 860px) {
+  .kpis, .kpis-4 { grid-template-columns: repeat(2, 1fr); gap: 12px; }
 }
-@media (max-width: 560px) {
+@media (max-width: 480px) {
   .kpis-3 { grid-template-columns: 1fr; }
-  .kpis-3 .kpi { border-left: 0 !important; }
-  .kpis-3 .kpi + .kpi { border-top: 1px solid var(--line); }
 }
 /* KPIs that filter the list below */
-.kpi-button { background: none; border: 0; text-align: left; cursor: pointer; transition: background 0.12s; }
-.kpi-button:hover { background: var(--surface-2); }
-.kpi-button.active { background: var(--accent-soft); }
+.kpi-button {
+  text-align: left; cursor: pointer; font: inherit; color: inherit;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+}
+.kpi-button:hover { background: var(--surface-2); box-shadow: var(--shadow-lg); transform: translateY(-1px); }
+.kpi-button:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--accent-ring); }
+.kpi-button.active { background: var(--accent-soft); border-color: var(--accent); }
 .kpi-button.active .kpi-label { color: var(--accent); }
+@media (prefers-reduced-motion: reduce) { .kpi-button, .kpi-button:hover { transition: none; transform: none; } }
 
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
 @media (max-width: 860px) { .grid-2 { grid-template-columns: 1fr; } }
