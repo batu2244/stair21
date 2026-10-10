@@ -56,7 +56,14 @@ export const EXAMPLE_FOLLOW_UPS = [
     example: true,
     priority: "high",
     client_name: "Sarah Chen",
-    detail: "Tier A · AUM $2.4M · $150K cash deposit: call about investing idle cash, propose a bond ladder · Owner J. Patel",
+    // Shown on the client profile (/clients/:id), not in the dashboard row.
+    profile: {
+      tier: "A",
+      aum: "$2.4M",
+      owner: "J. Patel",
+      situation: "$150K cash deposit",
+      action: "Call about investing idle cash, propose a bond ladder",
+    },
     follow_up_note: "Call re: investing idle cash. Propose bond ladder, log call notes.",
     next_meeting_at: daysFromNow(3, 10),
     last_contact_at: daysFromNow(-28, 10),
