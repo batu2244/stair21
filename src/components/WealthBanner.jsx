@@ -1,11 +1,11 @@
 import "./WealthBanner.css";
 
 // Dashboard footer banner: grainy blue gradient with a calm, rounded
-// landscape (sun, clouds, rolling hills).
+// landscape of rolling hills.
 // Pure SVG, so it stays sharp and needs no image hosting.
 export default function WealthBanner() {
   return (
-    <footer className="wealth-banner" aria-label="Client Hubs">
+    <footer className="wealth-banner" aria-label="ClientHub">
       <svg className="wb-art" viewBox="0 0 1200 340" preserveAspectRatio="xMaxYMax slice" aria-hidden="true">
         <defs>
           <linearGradient id="wb-sky" x1="0" y1="0" x2="1" y2="1">
@@ -30,24 +30,6 @@ export default function WealthBanner() {
         <rect width="1200" height="340" fill="url(#wb-sky)" />
         <rect width="1200" height="340" fill="url(#wb-glow)" />
 
-        {/* Sun */}
-        <circle cx="955" cy="70" r="34" fill="#dbeafe" opacity="0.9" />
-        <circle cx="955" cy="70" r="52" fill="#dbeafe" opacity="0.15" />
-
-        {/* Clouds */}
-        <g fill="#ffffff">
-          <g opacity="0.85">
-            <ellipse cx="720" cy="78" rx="46" ry="18" />
-            <ellipse cx="748" cy="64" rx="30" ry="22" />
-            <ellipse cx="776" cy="80" rx="34" ry="15" />
-          </g>
-          <g opacity="0.7">
-            <ellipse cx="1090" cy="120" rx="40" ry="15" />
-            <ellipse cx="1112" cy="106" rx="26" ry="18" />
-            <ellipse cx="1136" cy="121" rx="28" ry="12" />
-          </g>
-        </g>
-
         {/* Back hills */}
         <path d="M520 340 C 640 210, 760 200, 880 250 S 1100 190, 1200 220 L1200 340 Z" fill="#3b82f6" opacity="0.55" />
         {/* Mid hill */}
@@ -62,7 +44,7 @@ export default function WealthBanner() {
       </svg>
 
       <div className="wb-copy">
-        <div className="wb-eyebrow">Client Hubs</div>
+        <div className="wb-eyebrow">ClientHub</div>
         <h2 className="wb-title">Wealth, made clear.</h2>
         <p className="wb-text">Every client gets one plan in plain words, approved by compliance and easy to come back to.</p>
       </div>
