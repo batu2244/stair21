@@ -3,7 +3,7 @@ import { hubs } from "@/lib/api";
 import { navigate } from "@/lib/router";
 import { fromLocalInput, toLocalInput, relative, shortDay, timeOf } from "@/lib/dates";
 import { EXAMPLE_FOLLOW_UPS } from "@/lib/example";
-import WealthBanner from "@/components/WealthBanner";
+import { WithBottomBanner } from "@/components/WealthBanner";
 
 // Dashboard: the follow-up manager. Who to contact, when, and whether they've confirmed.
 // Built-in example rows (h.example) are read-only and sit alongside real clients.
@@ -141,109 +141,110 @@ export default function FollowUps({ me, notify }) {
   const done = () => { setOpen(null); load(); };
 
   return (
-    <main className="page">
-      <div className="page-head">
-        <div>
-          <div className="eyebrow">Dashboard</div>
-          <h1 className="page-title">Good to see you{firstName ? `, ${firstName}` : ""}.</h1>
-          <p className="subhead">Who to follow up with, and when.</p>
-        </div>
-      </div>
-
-      <div className="kpis kpis-4">
-        {kpis.map((k) => (
-          <button className={`kpi kpi-button${filter === k.key ? " active" : ""}`} key={k.key}
-            onClick={() => setFilter(filter === k.key ? "all" : k.key)}>
-            <div className="kpi-label">{k.label}</div>
-            <div className={`kpi-value ${k.cls}`}>{list === null ? "–" : k.value}</div>
-          </button>
-        ))}
-      </div>
-
-      <section className="panel-card">
-        <div className="card-head">
-          <div className="segmented" role="tablist">
-            {FILTERS.map((f) => (
-              <button key={f.key} role="tab" aria-selected={filter === f.key}
-                className={filter === f.key ? "active" : ""} onClick={() => setFilter(f.key)}>
-                {f.label}
-              </button>
-            ))}
+    <WithBottomBanner>
+      <main className="page">
+        <div className="page-head">
+          <div>
+            <div className="eyebrow">Dashboard</div>
+            <h1 className="page-title">Good to see you{firstName ? `, ${firstName}` : ""}.</h1>
+            <p className="subhead">Who to follow up with, and when.</p>
           </div>
-          <input className="input input-sm search" value={q} onChange={(e) => setQ(e.target.value)}
-            placeholder="Search clients" aria-label="Search clients" />
         </div>
 
-        {list === null ? <p className="muted pad">Loading…</p>
-          : rows.length === 0 ? (
-            <p className="muted pad">{all.length ? "Nobody here." : "No clients yet. Create a client hub to start tracking follow-ups."}</p>
-          ) : (
-            <div className="table-wrap">
-              <table className="table fu-table">
-                <thead>
-                  <tr>
-                    <th>Client</th>
-                    <th>Priority</th>
-                    <th>Next follow-up</th>
-                    <th>Status</th>
-                    <th>Client confirmed</th>
-                    <th>Last contact</th>
-                    <th>Note</th>
-                    <th aria-label="Actions" />
-                  </tr>
-                </thead>
-                <tbody>
-                  {rows.map((h) => {
-                    const st = stateOf(h);
-                    const isOpen = !h.example && open === h.id;
-                    const pr = PRIORITY[h.priority];
-                    return (
-                      <Fragment key={h.id}>
-                        <tr className={isOpen ? "open" : h.example ? "fu-example" : ""}
-                          onClick={() => !h.example && setOpen(isOpen ? null : h.id)}>
-                          <td className="strong">
-                            {h.client_name}
-                            {h.example && <span className="pill" style={{ marginLeft: 8 }}>Example</span>}
-                          </td>
-                          <td>{pr ? <span className={`pill ${pr.pill}`}>{pr.label}</span> : <span className="muted">—</span>}</td>
-                          <td>
-                            {h.next_meeting_at ? (
-                              <>
-                                <span className={st === "overdue" ? "danger strong" : "strong"}>{relative(h.next_meeting_at)}</span>
-                                <span className="muted"> · {shortDay(h.next_meeting_at)}, {timeOf(h.next_meeting_at)}</span>
-                              </>
-                            ) : <span className="muted">—</span>}
-                          </td>
-                          <td><span className={`pill ${STATE[st].pill}`}>{STATE[st].label}</span></td>
-                          <td>
-                            {!h.next_meeting_at ? <span className="muted">—</span>
-                              : h.meeting_confirmed ? <span className="pill pill-ok">Confirmed</span>
-                              : h.live_version > 0 ? <span className="muted">Not yet</span>
-                              : <span className="muted">Hub not shared</span>}
-                          </td>
-                          <td className="muted">{formatDay(h.last_contact_at)}</td>
-                          <td className="muted fu-note">{h.follow_up_note || "—"}</td>
-                          <td className="num">
-                            {!h.example && <button className="link small" onClick={(e) => { e.stopPropagation(); setOpen(isOpen ? null : h.id); }}>
-                              {isOpen ? "Close" : h.next_meeting_at ? "Manage" : "Schedule"}
-                            </button>}
-                          </td>
-                        </tr>
-                        {isOpen && (
-                          <tr className="fu-manage-row">
-                            <td colSpan={8}><Manage h={h} onDone={done} notify={notify} /></td>
-                          </tr>
-                        )}
-                      </Fragment>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          )}
-      </section>
+        <div className="kpis kpis-4">
+          {kpis.map((k) => (
+            <button className={`kpi kpi-button${filter === k.key ? " active" : ""}`} key={k.key}
+              onClick={() => setFilter(filter === k.key ? "all" : k.key)}>
+              <div className="kpi-label">{k.label}</div>
+              <div className={`kpi-value ${k.cls}`}>{list === null ? "–" : k.value}</div>
+            </button>
+          ))}
+        </div>
 
-      <WealthBanner />
-    </main>
+        <section className="panel-card">
+          <div className="card-head">
+            <div className="segmented" role="tablist">
+              {FILTERS.map((f) => (
+                <button key={f.key} role="tab" aria-selected={filter === f.key}
+                  className={filter === f.key ? "active" : ""} onClick={() => setFilter(f.key)}>
+                  {f.label}
+                </button>
+              ))}
+            </div>
+            <input className="input input-sm search" value={q} onChange={(e) => setQ(e.target.value)}
+              placeholder="Search clients" aria-label="Search clients" />
+          </div>
+
+          {list === null ? <p className="muted pad">Loading…</p>
+            : rows.length === 0 ? (
+              <p className="muted pad">{all.length ? "Nobody here." : "No clients yet. Create a client hub to start tracking follow-ups."}</p>
+            ) : (
+              <div className="table-wrap">
+                <table className="table fu-table">
+                  <thead>
+                    <tr>
+                      <th>Client</th>
+                      <th>Priority</th>
+                      <th>Next follow-up</th>
+                      <th>Status</th>
+                      <th>Client confirmed</th>
+                      <th>Last contact</th>
+                      <th>Note</th>
+                      <th aria-label="Actions" />
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {rows.map((h) => {
+                      const st = stateOf(h);
+                      const isOpen = !h.example && open === h.id;
+                      const pr = PRIORITY[h.priority];
+                      return (
+                        <Fragment key={h.id}>
+                          <tr className={isOpen ? "open" : h.example ? "fu-example" : ""}
+                            onClick={() => !h.example && setOpen(isOpen ? null : h.id)}>
+                            <td className="strong">
+                              {h.client_name}
+                              {h.example && <span className="pill" style={{ marginLeft: 8 }}>Example</span>}
+                            </td>
+                            <td>{pr ? <span className={`pill ${pr.pill}`}>{pr.label}</span> : <span className="muted">—</span>}</td>
+                            <td>
+                              {h.next_meeting_at ? (
+                                <>
+                                  <span className={st === "overdue" ? "danger strong" : "strong"}>{relative(h.next_meeting_at)}</span>
+                                  <span className="muted"> · {shortDay(h.next_meeting_at)}, {timeOf(h.next_meeting_at)}</span>
+                                </>
+                              ) : <span className="muted">—</span>}
+                            </td>
+                            <td><span className={`pill ${STATE[st].pill}`}>{STATE[st].label}</span></td>
+                            <td>
+                              {!h.next_meeting_at ? <span className="muted">—</span>
+                                : h.meeting_confirmed ? <span className="pill pill-ok">Confirmed</span>
+                                : h.live_version > 0 ? <span className="muted">Not yet</span>
+                                : <span className="muted">Hub not shared</span>}
+                            </td>
+                            <td className="muted">{formatDay(h.last_contact_at)}</td>
+                            <td className="muted fu-note">{h.follow_up_note || "—"}</td>
+                            <td className="num">
+                              {!h.example && <button className="link small" onClick={(e) => { e.stopPropagation(); setOpen(isOpen ? null : h.id); }}>
+                                {isOpen ? "Close" : h.next_meeting_at ? "Manage" : "Schedule"}
+                              </button>}
+                            </td>
+                          </tr>
+                          {isOpen && (
+                            <tr className="fu-manage-row">
+                              <td colSpan={8}><Manage h={h} onDone={done} notify={notify} /></td>
+                            </tr>
+                          )}
+                        </Fragment>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+        </section>
+
+      </main>
+    </WithBottomBanner>
   );
 }
