@@ -378,6 +378,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator { cursor: pointe
 }
 .fu-table tbody tr.open { background: var(--surface-2); }
 .fu-table tbody tr.fu-example { cursor: default; }
+.fu-table .fu-detail { font-weight: 400; white-space: normal; max-width: 340px; margin-top: 2px; }
 .fu-table tbody tr.fu-manage-row { cursor: default; background: var(--surface-2); }
 .fu-table tbody tr.fu-manage-row:hover { background: var(--surface-2); }
 .fu-table tbody tr.fu-manage-row td { white-space: normal; padding-top: 4px; }

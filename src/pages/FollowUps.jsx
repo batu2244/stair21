@@ -226,6 +226,7 @@ export default function FollowUps({ me, notify }) {
                             <td className="strong">
                               {h.client_name}
                               {h.example && <span className="pill" style={{ marginLeft: 8 }}>Example</span>}
+                              {h.detail && <div className="muted small fu-detail">{h.detail}</div>}
                             </td>
                             <td>{pr ? <span className={`pill ${pr.pill}`}>{pr.label}</span> : <span className="muted">—</span>}</td>
                             <td>

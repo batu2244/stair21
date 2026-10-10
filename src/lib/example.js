@@ -52,6 +52,18 @@ function daysFromNow(days, hour) {
 // Built-in example follow-ups for the dashboard: a mix of urgent and routine, soonest first.
 export const EXAMPLE_FOLLOW_UPS = [
   {
+    id: "example-high-3",
+    example: true,
+    priority: "high",
+    client_name: "Sarah Chen",
+    detail: "Tier A · AUM $2.4M · $150K cash deposit: call about investing idle cash, propose a bond ladder · Owner J. Patel",
+    follow_up_note: "Call re: investing idle cash. Propose bond ladder, log call notes.",
+    next_meeting_at: daysFromNow(3, 10),
+    last_contact_at: daysFromNow(-28, 10),
+    live_version: 1,
+    meeting_confirmed: false,
+  },
+  {
     id: "example-high",
     example: true,
     priority: "high",
