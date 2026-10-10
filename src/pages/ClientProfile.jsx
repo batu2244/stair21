@@ -67,52 +67,109 @@ export default function ClientProfile({ id, notify }) {
       </div>
 
       <div className="cp-grid">
-        <section className="panel-card">
-          <div className="card-head"><h2 className="card-title">Why we're following up</h2></div>
-          <div className="pad cp-why">
-            {p.situation && (
-              <div>
-                <div className="label">Situation</div>
-                <p className="cp-big">{p.situation}</p>
-              </div>
-            )}
-            {p.action && (
-              <div>
-                <div className="label">Next action</div>
-                <p className="cp-big">{p.action}</p>
-              </div>
-            )}
-            {c.follow_up_note && (
-              <div>
-                <div className="label">Internal note</div>
-                <p className="muted">{c.follow_up_note}</p>
-              </div>
-            )}
-          </div>
-        </section>
-
-        <section className="panel-card">
-          <div className="card-head"><h2 className="card-title">Next follow-up</h2></div>
-          <div className="pad">
-            {c.next_meeting_at ? (
-              <>
-                <div className="cp-when">{relative(c.next_meeting_at)}</div>
-                <div className="muted">{meetingDate(c.next_meeting_at)}</div>
-                <div style={{ marginTop: 18 }}>
-                  {confirmed ? (
-                    <span className="pill pill-ok">Confirmed</span>
-                  ) : (
-                    <button className="btn btn-sm" onClick={() => { confirmExample(c.id); setConfirmed(true); notify("Meeting confirmed"); }}>
-                      Confirm meeting
-                    </button>
-                  )}
+        <div className="cp-col">
+          <section className="panel-card">
+            <div className="card-head"><h2 className="card-title">Why we're following up</h2></div>
+            <div className="pad cp-why">
+              {p.situation && (
+                <div>
+                  <div className="label">Situation</div>
+                  <p className="cp-big">{p.situation}</p>
                 </div>
-              </>
-            ) : (
-              <p className="muted">No follow-up scheduled.</p>
-            )}
-          </div>
-        </section>
+              )}
+              {p.action && (
+                <div>
+                  <div className="label">Next action</div>
+                  <p className="cp-big">{p.action}</p>
+                </div>
+              )}
+              {c.follow_up_note && (
+                <div>
+                  <div className="label">Internal note</div>
+                  <p className="muted">{c.follow_up_note}</p>
+                </div>
+              )}
+            </div>
+          </section>
+
+          {p.accounts?.length > 0 && (
+            <section className="panel-card">
+              <div className="card-head">
+                <h2 className="card-title">Accounts</h2>
+                <span className="muted small">{p.aum} total</span>
+              </div>
+              <div className="table-wrap">
+                <table className="table cp-accounts">
+                  <thead>
+                    <tr><th>Account</th><th>Type</th><th className="num">Value</th></tr>
+                  </thead>
+                  <tbody>
+                    {p.accounts.map((a) => (
+                      <tr key={a.name}>
+                        <td className="strong">{a.name}</td>
+                        <td className="muted">{a.type}</td>
+                        <td className="num strong">{a.value}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          )}
+        </div>
+
+        <div className="cp-col">
+          <section className="panel-card">
+            <div className="card-head"><h2 className="card-title">Next follow-up</h2></div>
+            <div className="pad">
+              {c.next_meeting_at ? (
+                <>
+                  <div className="cp-when">{relative(c.next_meeting_at)}</div>
+                  <div className="muted">{meetingDate(c.next_meeting_at)}</div>
+                  <div style={{ marginTop: 18 }}>
+                    {confirmed ? (
+                      <span className="pill pill-ok">Confirmed</span>
+                    ) : (
+                      <button className="btn btn-sm" onClick={() => { confirmExample(c.id); setConfirmed(true); notify("Meeting confirmed"); }}>
+                        Confirm meeting
+                      </button>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <p className="muted">No follow-up scheduled.</p>
+              )}
+            </div>
+          </section>
+
+          {(p.email || p.phone) && (
+            <section className="panel-card">
+              <div className="card-head"><h2 className="card-title">Contact</h2></div>
+              <dl className="pad cp-details">
+                {p.email && (<><dt>Email</dt><dd><a className="link" href={`mailto:${p.email}`}>{p.email}</a></dd></>)}
+                {p.phone && (<><dt>Phone</dt><dd><a className="link" href={`tel:${p.phone.replace(/[^0-9+]/g, "")}`}>{p.phone}</a></dd></>)}
+                {p.location && (<><dt>Location</dt><dd>{p.location}</dd></>)}
+                {p.household && (<><dt>Household</dt><dd>{p.household}</dd></>)}
+                {p.client_since && (<><dt>Client since</dt><dd>{p.client_since}</dd></>)}
+                {p.risk && (<><dt>Risk profile</dt><dd>{p.risk}</dd></>)}
+              </dl>
+            </section>
+          )}
+
+          {p.activity?.length > 0 && (
+            <section className="panel-card">
+              <div className="card-head"><h2 className="card-title">Recent activity</h2></div>
+              <ul className="pad cp-activity">
+                {p.activity.map((a) => (
+                  <li key={a.at + a.text}>
+                    <div>{a.text}</div>
+                    <div className="muted small">{formatDay(a.at)}</div>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+        </div>
       </div>
     </main>
   );
