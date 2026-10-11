@@ -139,6 +139,7 @@ export default function LinkedInBrief({ url, onSaveUrl }) {
               <div className="li-foot">
                 <a className="link small" href={url} target="_blank" rel="noreferrer">View on LinkedIn</a>
                 <button className="link small" type="button" onClick={() => setEditing(true)}>Change link</button>
+                <a className="muted small li-credit" href="https://brightdata.com" target="_blank" rel="noreferrer">Data from Bright Data</a>
               </div>
             )}
           </>
