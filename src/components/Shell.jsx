@@ -72,11 +72,13 @@ export default function Shell({ me, tab, children }) {
         <div className="appbar-inner">
           <button className="brand" onClick={() => navigate("/")}>
             {me.firm?.logo_url ? (
-              <img src={me.firm.logo_url} alt={me.firm.name || "Firm logo"} />
+              <>
+                <img src={me.firm.logo_url} alt={me.firm.name || "Firm logo"} />
+                <span>{me.firm?.name}</span>
+              </>
             ) : (
-              <span className="brand-mark" aria-hidden="true" />
+              <img className="brand-full" src="/full-logo.png" alt="Stair21" />
             )}
-            <span>{me.firm?.name || "Stair21"}</span>
           </button>
           <nav className="tabs" role="tablist">
             {TABS.map((t) => (
