@@ -13,7 +13,7 @@
   width: 100%;
   min-height: 180px;
   overflow: hidden;
-  background: #1d4ed8;
+  background: var(--ink);
   isolation: isolate;
 }
 .wb-art { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -2; }
@@ -21,7 +21,7 @@
 /* Keep the copy readable where it overlaps the sky. */
 .wealth-banner::before {
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  background: linear-gradient(90deg, rgba(11, 42, 111, 0.85) 0%, rgba(11, 42, 111, 0.45) 35%, rgba(11, 42, 111, 0) 58%);
+  background: linear-gradient(90deg, rgba(14, 46, 51, 0.85) 0%, rgba(14, 46, 51, 0.45) 35%, rgba(14, 46, 51, 0) 58%);
 }
 
 /* Film grain over everything: a tiled noise texture, blended so it reads as
@@ -36,13 +36,13 @@
 
 .wb-copy { position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; padding: 32px 24px 36px; color: #fff; }
 .wb-copy > * { max-width: 440px; }
-.wb-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #bfdbfe; }
+.wb-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--moonlight); }
 .wb-title { font-size: 28px; line-height: 1.15; font-weight: 700; letter-spacing: -0.025em; margin-top: 8px; }
 
 /* Phones: copy on top, the scene below it. */
 @media (max-width: 720px) {
   .wealth-banner { min-height: 240px; }
-  .wealth-banner::before { background: linear-gradient(180deg, rgba(11, 42, 111, 0.85) 0%, rgba(11, 42, 111, 0.35) 45%, rgba(11, 42, 111, 0) 60%); }
+  .wealth-banner::before { background: linear-gradient(180deg, rgba(14, 46, 51, 0.85) 0%, rgba(14, 46, 51, 0.35) 45%, rgba(14, 46, 51, 0) 60%); }
   .wb-copy { padding: 24px 24px 28px; }
   .wb-title { font-size: 26px; }
 }
