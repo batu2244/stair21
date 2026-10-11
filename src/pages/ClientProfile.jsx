@@ -1,4 +1,5 @@
 import { useState } from "react";
+import LinkedInBrief from "@/components/LinkedInBrief";
 import { confirmExample, isExampleConfirmed, visibleExamples } from "@/lib/exampleState";
 import { navigate } from "@/lib/router";
 import DeleteClient from "@/components/DeleteClient";
@@ -108,6 +109,8 @@ export default function ClientProfile({ id, notify }) {
               </ul>
             </section>
           )}
+
+          {p.linkedin && <LinkedInBrief url={p.linkedin} />}
 
           {p.accounts?.length > 0 && (
             <section className="panel-card">

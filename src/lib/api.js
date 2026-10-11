@@ -32,6 +32,18 @@ export async function hubs(action, params = {}) {
   }
 }
 
+// LinkedIn insights for a profile URL (see base44/functions/linkedin).
+export async function linkedinBrief(url, force = false) {
+  try {
+    const res = await base44.functions.invoke("linkedin", { action: "brief", ownerKey: ownerKey(), url, force });
+    return res.data.brief;
+  } catch (err) {
+    const e = new Error(err?.response?.data?.error || "Something went wrong");
+    e.status = err?.response?.status;
+    throw e;
+  }
+}
+
 // Public client view by link token (see base44/functions/client-hub).
 export async function clientHub(action, token) {
   try {
