@@ -1,4 +1,4 @@
-# ClientHub
+# Stair21
 
 One template, filled per client. After a meeting the advisor enters the client's name, goals, meeting notes and next step. AI drafts a plain-language hub ("here's your plan and why"), the advisor edits it, and a compliance reviewer signs off. Clients open it from an expiring, revocable link.
 

@@ -76,7 +76,7 @@ export default function Shell({ me, tab, children }) {
             ) : (
               <span className="brand-mark" aria-hidden="true" />
             )}
-            <span>{me.firm?.name || "ClientHub"}</span>
+            <span>{me.firm?.name || "Stair21"}</span>
           </button>
           <nav className="tabs" role="tablist">
             {TABS.map((t) => (
