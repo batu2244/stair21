@@ -8,3 +8,4 @@
 .li-form { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 .li-form .input { flex: 1; min-width: 220px; }
 .li-foot { display: flex; gap: 18px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+.li-empty { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }

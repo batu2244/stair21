@@ -3,8 +3,9 @@ import { createClientFromRequest } from "npm:@base44/sdk";
 
 // LinkedIn insights for a client profile: scrape the public profile with Bright
 // Data, then have the AI turn it into short talking points for the advisor.
-// Results are cached by URL (LinkedInBrief) so each profile is scraped at most
-// once a week; a manual refresh is allowed every 10 minutes.
+// Nothing is scraped until the advisor asks: `cached: true` only returns an
+// earlier result. Results are cached by URL (LinkedInBrief), so each profile is
+// scraped at most once a week; a manual refresh is allowed every 10 minutes.
 // Needs the BRIGHTDATA_API_KEY secret (npx base44 secrets set).
 
 const DATASET = "gd_l1viktl72bvl7bjuj0"; // Bright Data: LinkedIn people profiles
@@ -93,6 +94,9 @@ export default async function (req: Request): Promise<Response> {
     let row: any = (await db.LinkedInBrief.filter({ url }, "-created_date", 1))[0] || null;
     const age = row?.fetched_at ? now - new Date(row.fetched_at).getTime() : Infinity;
     const out = (r: any) => json({ brief: { url, status: r.status, name: r.name, headline: r.headline, bullets: r.bullets || [], fetched_at: r.fetched_at, error: r.error } });
+
+    // Opening a profile only shows what was generated before; it never scrapes.
+    if (body.cached) return row ? out(row) : json({ brief: { url, status: "none", bullets: [] } });
 
     if (row?.status === "ready" && (body.force ? age < REFRESH_COOLDOWN_MS : age < FRESH_MS)) return out(row);
 

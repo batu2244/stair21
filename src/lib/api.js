@@ -33,9 +33,10 @@ export async function hubs(action, params = {}) {
 }
 
 // LinkedIn insights for a profile URL (see base44/functions/linkedin).
-export async function linkedinBrief(url, force = false) {
+// cached: only return an earlier result, never scrape.
+export async function linkedinBrief(url, { force = false, cached = false } = {}) {
   try {
-    const res = await base44.functions.invoke("linkedin", { action: "brief", ownerKey: ownerKey(), url, force });
+    const res = await base44.functions.invoke("linkedin", { action: "brief", ownerKey: ownerKey(), url, force, cached });
     return res.data.brief;
   } catch (err) {
     const e = new Error(err?.response?.data?.error || "Something went wrong");
