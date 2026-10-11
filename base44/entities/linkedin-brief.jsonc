@@ -1,0 +1,19 @@
+{
+  "name": "LinkedInBrief",
+  "type": "object",
+  "properties": {
+    "url": { "type": "string", "description": "Canonical https://www.linkedin.com/in/<slug>/" },
+    "status": { "type": "string", "enum": ["pending", "ready", "failed"], "default": "pending" },
+    "snapshot_id": { "type": "string", "description": "Bright Data snapshot while a scrape is still running" },
+    "name": { "type": "string" },
+    "headline": { "type": "string", "description": "One-line AI summary of who they are" },
+    "bullets": { "type": "array", "items": { "type": "string" }, "description": "AI talking points for the advisor" },
+    "error": { "type": "string" },
+    "requested_at": { "type": "string", "format": "date-time" },
+    "fetched_at": { "type": "string", "format": "date-time" }
+  },
+  "required": ["url"],
+  // Cache of LinkedIn scrapes, shared by URL so each profile is scraped at most
+  // once a week. No direct browser access: only the linkedin function reads it.
+  "rls": { "create": false, "read": false, "update": false, "delete": false }
+}
