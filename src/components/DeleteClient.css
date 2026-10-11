@@ -1,0 +1,9 @@
+/* Uses the theme tokens from index.css. */
+.link.delete-link { color: var(--danger); }
+.link.delete-link:hover { color: var(--danger); }
+.delete-confirm { display: inline-flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.btn.btn-danger { background: var(--danger); }
+.btn.btn-danger:hover { background: var(--danger); filter: brightness(0.92); }
+/* Client Hub list rows hold a Delete control, so the row itself isn't a button. */
+.hub-row { cursor: pointer; }
+.hub-open { background: none; border: 0; padding: 0; text-align: left; font: inherit; color: inherit; cursor: pointer; }
