@@ -110,8 +110,6 @@ export default function ClientProfile({ id, notify }) {
             </section>
           )}
 
-          {p.linkedin && <LinkedInBrief url={p.linkedin} />}
-
           {p.accounts?.length > 0 && (
             <section className="panel-card">
               <div className="card-head">
@@ -136,6 +134,8 @@ export default function ClientProfile({ id, notify }) {
               </div>
             </section>
           )}
+
+          {p.linkedin && <LinkedInBrief url={p.linkedin} />}
         </div>
 
         <div className="cp-col">
