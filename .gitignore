@@ -25,3 +25,6 @@ slides/
 hdr.txt
 .deploy.lock
 .dev-port
+
+# Shared documents (guides, decks) live in the main folder, not in git
+*.pdf
