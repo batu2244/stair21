@@ -23,5 +23,6 @@
 .cp-details { display: grid; grid-template-columns: auto 1fr; gap: 10px 16px; margin: 0; }
 .cp-details dt { color: var(--secondary); font-size: 13px; }
 .cp-details dd { margin: 0; font-size: 14px; overflow-wrap: anywhere; }
-.cp-activity { list-style: none; margin: 0; display: flex; flex-direction: column; gap: 14px; }
-.cp-activity li { padding-left: 14px; border-left: 2px solid var(--line-strong); }
+.cp-activity { list-style: none; margin: 0; display: flex; flex-direction: column; gap: 18px; }
+.cp-activity li { padding-left: 16px; border-left: 2px solid var(--line-strong); }
+.cp-activity .cp-big { margin-bottom: 2px; }
