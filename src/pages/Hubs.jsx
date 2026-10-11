@@ -14,7 +14,7 @@ function summary(c) {
     ? `Next follow-up ${relative(c.next_meeting_at).toLowerCase()} · ${shortDay(c.next_meeting_at)}`
     : "No follow-up scheduled";
   const p = c.profile || {};
-  return [p.tier && `Tier ${String(p.tier).replace(/^Tier\s+/i, "")}`, p.aum && `AUM ${p.aum}`, next].filter(Boolean).join(" · ");
+  return [p.tier && (/^[A-Z]$/i.test(p.tier) ? `Tier ${p.tier}` : p.tier), p.aum && (/^\$/.test(p.aum) ? `AUM ${p.aum}` : p.aum), next].filter(Boolean).join(" · ");
 }
 
 // Client Hub: every client, A to Z. Example clients open their profile; real ones open their hub.

@@ -64,6 +64,10 @@ export const EXAMPLE_FOLLOW_UPS = [
     profile: {
       situation: "Founder of VenueHopper in New York. NYU 2019–2023. Runs Ship & Drink founder build nights; VenueHopper won first place at NYU's Berkley Center venture competition.",
       action: "Intro call: congratulate him on the NYU win, learn his plans for the company and his personal finances as a young founder",
+      // Prospect: no account data yet, so nothing is invented here.
+      tier: "Prospect",
+      aum: "Not yet a client",
+      owner: "J. Patel",
       company: "VenueHopper (Founder)",
       location: "New York, NY",
       linkedin: "https://www.linkedin.com/in/stonnyliu/",
