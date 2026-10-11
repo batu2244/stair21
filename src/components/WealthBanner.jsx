@@ -5,7 +5,7 @@ import "./WealthBanner.css";
 // Pure SVG, so it stays sharp and needs no image hosting.
 export default function WealthBanner() {
   return (
-    <footer className="wealth-banner" aria-label="ClientHub">
+    <footer className="wealth-banner" aria-label="Stair21">
       <svg className="wb-art" viewBox="0 0 1200 340" preserveAspectRatio="xMaxYMax slice" aria-hidden="true">
         <defs>
           <linearGradient id="wb-sky" x1="0" y1="0" x2="1" y2="1">
@@ -44,7 +44,7 @@ export default function WealthBanner() {
       </svg>
 
       <div className="wb-copy">
-        <div className="wb-eyebrow">ClientHub</div>
+        <div className="wb-eyebrow">Stair21</div>
         <h2 className="wb-title">Wealth, made clear.</h2>
       </div>
     </footer>
