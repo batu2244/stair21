@@ -93,6 +93,20 @@ export default function ClientProfile({ id, notify }) {
             </div>
           </section>
 
+          {p.activity?.length > 0 && (
+            <section className="panel-card">
+              <div className="card-head"><h2 className="card-title">Recent activity</h2></div>
+              <ul className="pad cp-activity">
+                {p.activity.map((a) => (
+                  <li key={a.at + a.text}>
+                    <p className="cp-big">{a.text}</p>
+                    <div className="muted small">{formatDay(a.at)}</div>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
           {p.accounts?.length > 0 && (
             <section className="panel-card">
               <div className="card-head">
@@ -156,20 +170,6 @@ export default function ClientProfile({ id, notify }) {
                 {p.client_since && (<><dt>Client since</dt><dd>{p.client_since}</dd></>)}
                 {p.risk && (<><dt>Risk profile</dt><dd>{p.risk}</dd></>)}
               </dl>
-            </section>
-          )}
-
-          {p.activity?.length > 0 && (
-            <section className="panel-card">
-              <div className="card-head"><h2 className="card-title">Recent activity</h2></div>
-              <ul className="pad cp-activity">
-                {p.activity.map((a) => (
-                  <li key={a.at + a.text}>
-                    <div>{a.text}</div>
-                    <div className="muted small">{formatDay(a.at)}</div>
-                  </li>
-                ))}
-              </ul>
             </section>
           )}
         </div>
