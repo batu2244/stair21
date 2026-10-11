@@ -3,6 +3,7 @@ import { navigate } from "@/lib/router";
 import { hubs } from "@/lib/api";
 import BackLink from "@/components/BackLink";
 import { fromLocalInput } from "@/lib/dates";
+import { isLinkedInProfile } from "@/lib/linkedinLinks";
 
 // Add Client: just a name and your notes. AI drafts the rest (goals, plan,
 // next steps); you review it on the next screen.
@@ -10,9 +11,11 @@ export default function Create() {
   const [name, setName] = useState("");
   const [notes, setNotes] = useState("");
   const [nextMeeting, setNextMeeting] = useState("");
+  const [linkedin, setLinkedin] = useState("");
+  const badLinkedin = linkedin.trim() !== "" && !isLinkedInProfile(linkedin);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  const ready = name.trim() && notes.trim();
+  const ready = name.trim() && notes.trim() && !badLinkedin;
 
   const submit = async (e) => {
     e.preventDefault();
@@ -24,6 +27,7 @@ export default function Create() {
         client_name: name.trim(),
         meeting_notes: notes.trim(),
         next_meeting_at: fromLocalInput(nextMeeting),
+        linkedin_url: linkedin.trim(),
       });
       navigate(`/hubs/${hub.id}`);
     } catch (err) {
@@ -49,6 +53,13 @@ export default function Create() {
           <span className="label">Notes</span>
           <textarea className="input" rows={6} value={notes} onChange={(e) => setNotes(e.target.value)}
             placeholder="What you talked about and what happens next." />
+        </label>
+        <label className="field">
+          <span className="label">LinkedIn <span className="muted" style={{ textTransform: "none", letterSpacing: 0 }}>(optional)</span></span>
+          <input className="input" value={linkedin} onChange={(e) => setLinkedin(e.target.value)} placeholder="linkedin.com/in/their-name" />
+          {badLinkedin
+            ? <p className="error" style={{ marginTop: 6 }}>Paste a LinkedIn profile link, like linkedin.com/in/their-name</p>
+            : <p className="hint">We'll pull talking points from their profile automatically.</p>}
         </label>
         <label className="field">
           <span className="label">Next meeting <span className="muted" style={{ textTransform: "none", letterSpacing: 0 }}>(optional)</span></span>

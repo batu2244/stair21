@@ -1,5 +1,6 @@
 import { useState } from "react";
 import LinkedInBrief from "@/components/LinkedInBrief";
+import { exampleLink, setExampleLink } from "@/lib/linkedinLinks";
 import { confirmExample, isExampleConfirmed, visibleExamples } from "@/lib/exampleState";
 import { navigate } from "@/lib/router";
 import DeleteClient from "@/components/DeleteClient";
@@ -24,6 +25,7 @@ function initials(name = "") {
 export default function ClientProfile({ id, notify }) {
   const c = visibleExamples().find((x) => x.id === id);
   const [confirmed, setConfirmed] = useState(!!c?.meeting_confirmed || (c && isExampleConfirmed(c.id)));
+  const [linkedin, setLinkedin] = useState(() => (c ? exampleLink(c.id) || c.profile?.linkedin || "" : ""));
 
   if (!c) {
     return (
@@ -135,7 +137,7 @@ export default function ClientProfile({ id, notify }) {
             </section>
           )}
 
-          {p.linkedin && <LinkedInBrief url={p.linkedin} />}
+          <LinkedInBrief url={linkedin} onSaveUrl={(u) => { setExampleLink(c.id, u); setLinkedin(u); }} />
         </div>
 
         <div className="cp-col">
@@ -162,7 +164,7 @@ export default function ClientProfile({ id, notify }) {
             </div>
           </section>
 
-          {(p.email || p.phone || p.location || p.linkedin) && (
+          {(p.email || p.phone || p.location || linkedin) && (
             <section className="panel-card">
               <div className="card-head"><h2 className="card-title">Contact</h2></div>
               <dl className="pad cp-details">
@@ -170,7 +172,7 @@ export default function ClientProfile({ id, notify }) {
                 {p.phone && (<><dt>Phone</dt><dd><a className="link" href={`tel:${p.phone.replace(/[^0-9+]/g, "")}`}>{p.phone}</a></dd></>)}
                 {p.location && (<><dt>Location</dt><dd>{p.location}</dd></>)}
                 {p.company && (<><dt>Company</dt><dd>{p.company}</dd></>)}
-                {p.linkedin && (<><dt>LinkedIn</dt><dd><a className="link" href={p.linkedin} target="_blank" rel="noreferrer">View profile</a></dd></>)}
+                {linkedin && (<><dt>LinkedIn</dt><dd><a className="link" href={linkedin} target="_blank" rel="noreferrer">View profile</a></dd></>)}
                 {p.household && (<><dt>Household</dt><dd>{p.household}</dd></>)}
                 {p.client_since && (<><dt>Client since</dt><dd>{p.client_since}</dd></>)}
                 {p.risk && (<><dt>Risk profile</dt><dd>{p.risk}</dd></>)}

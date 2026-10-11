@@ -34,6 +34,8 @@
     "follow_up_note": { "type": "string", "description": "Internal note, never shown to the client" },
     "last_contact_at": { "type": "string", "format": "date-time", "description": "When the last follow-up was marked done" },
     "meeting_confirmed": { "type": "boolean", "default": false },
+    // LinkedIn profile for the "From LinkedIn" insights (see the linkedin function).
+    "linkedin_url": { "type": "string", "description": "Canonical https://www.linkedin.com/in/<slug>/" },
     // Archived clients are hidden everywhere, but their approved versions and
     // activity stay in the database (books and records).
     "archived": { "type": "boolean", "default": false },
