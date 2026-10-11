@@ -83,6 +83,21 @@ const str = (v: unknown, max = 2000) => (typeof v === "string" ? v.trim().slice(
 const list = (v: unknown, n: number, max = 300) =>
   Array.isArray(v) ? v.map((s) => str(s, max)).filter(Boolean).slice(0, n) : [];
 
+// A LinkedIn profile link in one canonical form, or "" if it isn't one.
+function linkedinUrl(v: unknown) {
+  let s = str(v, 300);
+  if (!s) return "";
+  if (!/^https?:\/\//i.test(s)) s = `https://${s}`;
+  try {
+    const u = new URL(s);
+    const m = u.pathname.match(/^\/in\/([A-Za-z0-9\-_%]{2,100})\/?$/);
+    if (!/(^|\.)linkedin\.com$/i.test(u.hostname) || !m) return "";
+    return `https://www.linkedin.com/in/${m[1].toLowerCase()}/`;
+  } catch {
+    return "";
+  }
+}
+
 function safeUrl(v: unknown) {
   const s = str(v, 500);
   return /^https?:\/\//i.test(s) ? s : "";
@@ -261,6 +276,7 @@ export default async function (req: Request): Promise<Response> {
           owner_key,
           advisor_name: profile.name,
           next_meeting_at: isoDate(body.next_meeting_at),
+          linkedin_url: linkedinUrl(body.linkedin_url),
           follow_up_note: "",
           status: "draft",
           compliance_flags: scan(content),
@@ -366,6 +382,17 @@ export default async function (req: Request): Promise<Response> {
           await log(hub.id, "Meeting confirmed by advisor", hub.next_meeting_at);
         }
         return json({ success: true });
+      }
+
+      case "setLinkedIn": {
+        // Add, change or clear the client's LinkedIn link.
+        const hub = await loadHub(body.hubId);
+        if (!hub) return notFound();
+        const linkedin_url = linkedinUrl(body.linkedin_url);
+        if (str(body.linkedin_url) && !linkedin_url) return json({ error: "That isn't a LinkedIn profile link" }, 400);
+        await db.ClientHub.update(hub.id, { linkedin_url });
+        await log(hub.id, linkedin_url ? "LinkedIn link saved" : "LinkedIn link removed", linkedin_url);
+        return json({ linkedin_url });
       }
 
       case "archiveHub": {

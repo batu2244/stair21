@@ -5,6 +5,7 @@ import HubView from "@/components/HubView";
 import BackLink from "@/components/BackLink";
 import DeleteClient from "@/components/DeleteClient";
 import FollowUpEditor from "@/components/FollowUpEditor";
+import LinkedInBrief from "@/components/LinkedInBrief";
 
 function formatDate(iso, time = false) {
   if (!iso) return "";
@@ -214,6 +215,13 @@ export default function HubDetail({ id, me, notify }) {
           </div>
         </section>
       )}
+
+      <section className="dash-section">
+        <LinkedInBrief url={hub.linkedin_url || ""} onSaveUrl={async (u) => {
+          const r = await hubs("setLinkedIn", { hubId: id, linkedin_url: u });
+          setData((d) => ({ ...d, hub: { ...d.hub, linkedin_url: r.linkedin_url } }));
+        }} />
+      </section>
 
       <section className="dash-section">
         <h2 className="title">Activity</h2>

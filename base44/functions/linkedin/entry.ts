@@ -30,9 +30,9 @@ const str = (v: unknown, max = 2000) => (typeof v === "string" ? v.trim().slice(
 // Accept linkedin.com/in/<slug> on any subdomain; return one canonical form.
 function canonical(raw: string) {
   try {
-    const u = new URL(raw);
+    const u = new URL(/^https?:\/\//i.test(raw) ? raw : `https://${raw}`);
     const m = u.pathname.match(/^\/in\/([A-Za-z0-9\-_%]{2,100})\/?$/);
-    if (u.protocol !== "https:" || !/(^|\.)linkedin\.com$/.test(u.hostname) || !m) return "";
+    if (!/(^|\.)linkedin\.com$/i.test(u.hostname) || !m) return "";
     return `https://www.linkedin.com/in/${m[1].toLowerCase()}/`;
   } catch {
     return "";

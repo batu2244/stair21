@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { linkedinBrief } from "@/lib/api";
+import { isLinkedInProfile } from "@/lib/linkedinLinks";
+import "@/components/LinkedInBrief.css";
 
 const POLL_MS = 15000;
 const MAX_POLLS = 12; // about three minutes
@@ -8,12 +10,46 @@ function updated(iso) {
   return iso ? new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric" }) : "";
 }
 
-// LinkedIn insights: loads automatically when the client has a LinkedIn link,
-// and "Refresh" asks for a fresh scrape. Long scrapes are polled until ready.
-export default function LinkedInBrief({ url }) {
-  const [brief, setBrief] = useState(null);
-  const [busy, setBusy] = useState(true);
+// Ask for (or change) the client's LinkedIn link. onSave may throw to show an error.
+function LinkForm({ initial = "", onSave, onCancel }) {
+  const [value, setValue] = useState(initial);
   const [error, setError] = useState("");
+  const [saving, setSaving] = useState(false);
+
+  const submit = async (e) => {
+    e.preventDefault();
+    if (!isLinkedInProfile(value)) return setError("Paste a LinkedIn profile link, like linkedin.com/in/their-name");
+    setSaving(true);
+    setError("");
+    try {
+      await onSave(value.trim());
+    } catch (err) {
+      setError(err.message);
+      setSaving(false);
+    }
+  };
+
+  return (
+    <form onSubmit={submit}>
+      <div className="li-form">
+        <input className="input" value={value} onChange={(e) => setValue(e.target.value)}
+          placeholder="linkedin.com/in/their-name" aria-label="LinkedIn profile link" autoFocus={!!initial} />
+        <button className="btn" type="submit" disabled={saving || !value.trim()}>{saving ? "Saving…" : "Get insights"}</button>
+        {onCancel && <button className="link small" type="button" onClick={onCancel}>Cancel</button>}
+      </div>
+      {error && <p className="error">{error}</p>}
+    </form>
+  );
+}
+
+// LinkedIn insights. With a link it loads automatically and "Refresh" asks for
+// a fresh scrape (long scrapes are polled until ready). Without one, it asks
+// for the link; saving it starts the scrape.
+export default function LinkedInBrief({ url, onSaveUrl }) {
+  const [brief, setBrief] = useState(null);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  const [editing, setEditing] = useState(false);
   const polls = useRef(0);
   const timer = useRef(null);
 
@@ -36,40 +72,65 @@ export default function LinkedInBrief({ url }) {
   };
 
   useEffect(() => {
+    setBrief(null);
+    setError("");
     polls.current = 0;
-    load(false);
+    if (url) load(false);
     return () => clearTimeout(timer.current);
   }, [url]);
 
+  const save = async (value) => {
+    await onSaveUrl(value);
+    setEditing(false);
+  };
+
   const ready = brief?.status === "ready";
+  const showForm = !url || editing;
 
   return (
     <section className="panel-card">
       <div className="card-head">
         <h2 className="card-title">From LinkedIn</h2>
-        <div className="li-head-right">
-          {ready && !busy && <span className="muted small">Updated {updated(brief.fetched_at)}</span>}
-          <button className="btn btn-sm btn-secondary" disabled={busy} onClick={() => { polls.current = 0; load(true); }}>
-            {busy ? "Reading LinkedIn…" : "Refresh from LinkedIn"}
-          </button>
-        </div>
+        {url && !editing && (
+          <div className="li-head-right">
+            {ready && !busy && <span className="muted small">Updated {updated(brief.fetched_at)}</span>}
+            <button className="btn btn-sm btn-secondary" disabled={busy} onClick={() => { polls.current = 0; load(true); }}>
+              {busy ? "Reading LinkedIn…" : "Refresh from LinkedIn"}
+            </button>
+          </div>
+        )}
       </div>
       <div className="pad">
-        {busy && !ready ? (
-          <p className="muted">Reading their LinkedIn profile and writing talking points. This can take up to a minute.</p>
-        ) : error && !ready ? (
-          <p className="error" style={{ marginTop: 0 }}>{error}</p>
-        ) : brief?.status === "failed" ? (
-          <p className="muted">{brief.error}</p>
-        ) : ready ? (
+        {showForm ? (
           <>
-            {brief.headline && <p className="cp-big">{brief.headline}</p>}
-            <ul className="li-bullets">
-              {brief.bullets.map((b) => <li key={b}>{b}</li>)}
-            </ul>
-            {error && <p className="error">{error}</p>}
+            {!url && <p className="muted li-intro">Add their LinkedIn and we'll pull talking points from their profile automatically.</p>}
+            <LinkForm initial={editing ? url : ""} onSave={save} onCancel={editing ? () => setEditing(false) : null} />
           </>
-        ) : null}
+        ) : (
+          <>
+            {busy && !ready ? (
+              <p className="muted">Reading their LinkedIn profile and writing talking points. This can take up to a minute.</p>
+            ) : error && !ready ? (
+              <p className="error" style={{ marginTop: 0 }}>{error}</p>
+            ) : brief?.status === "failed" ? (
+              <p className="muted">{brief.error}</p>
+            ) : ready ? (
+              <>
+                {brief.headline && <p className="li-headline">{brief.headline}</p>}
+                <ul className="li-bullets">
+                  {brief.bullets.map((b) => <li key={b}>{b}</li>)}
+                </ul>
+                {error && <p className="error">{error}</p>}
+              </>
+            ) : null}
+            {onSaveUrl && (
+              <div className="li-foot">
+                <a className="link small" href={url} target="_blank" rel="noreferrer">View on LinkedIn</a>
+                <button className="link small" type="button" onClick={() => setEditing(true)}>Change link</button>
+              </div>
+            )}
+          </>
+        )}
       </div>
     </section>
   );

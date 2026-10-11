@@ -1,0 +1,10 @@
+/* LinkedIn insights card. Uses the theme tokens from index.css. */
+.li-head-right { display: flex; align-items: center; gap: 12px; }
+.li-headline { font-size: 17px; font-weight: 500; }
+.li-bullets { margin: 12px 0 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; }
+.li-bullets li { font-size: 15px; line-height: 1.5; }
+.li-bullets li::marker { color: var(--accent); }
+.li-intro { margin-bottom: 12px; }
+.li-form { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.li-form .input { flex: 1; min-width: 220px; }
+.li-foot { display: flex; gap: 18px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
