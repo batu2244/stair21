@@ -42,9 +42,10 @@ function LinkForm({ initial = "", onSave, onCancel }) {
   );
 }
 
-// LinkedIn insights. With a link it loads automatically and "Refresh" asks for
-// a fresh scrape (long scrapes are polled until ready). Without one, it asks
-// for the link; saving it starts the scrape.
+// LinkedIn insights. Opening a profile only shows talking points generated
+// earlier; nothing is scraped until the advisor clicks Generate (or Refresh for
+// a fresh scrape). Long scrapes are polled until ready. Without a link, it asks
+// for one first.
 export default function LinkedInBrief({ url, onSaveUrl }) {
   const [brief, setBrief] = useState(null);
   const [busy, setBusy] = useState(false);
@@ -53,15 +54,17 @@ export default function LinkedInBrief({ url, onSaveUrl }) {
   const polls = useRef(0);
   const timer = useRef(null);
 
-  const load = async (force = false) => {
+  // mode: "cached" (show earlier result only), "generate", or "refresh" (force a new scrape).
+  const load = async (mode = "generate") => {
     clearTimeout(timer.current);
-    setBusy(true);
+    setBusy(mode !== "cached");
     setError("");
     try {
-      const b = await linkedinBrief(url, force);
+      const b = await linkedinBrief(url, { cached: mode === "cached", force: mode === "refresh" });
       setBrief(b);
       if (b.status === "pending" && polls.current++ < MAX_POLLS) {
-        timer.current = setTimeout(() => load(false), POLL_MS);
+        setBusy(true);
+        timer.current = setTimeout(() => load("generate"), POLL_MS);
         return;
       }
       if (b.status === "pending") setError("LinkedIn is taking longer than usual. Try again in a few minutes.");
@@ -75,7 +78,7 @@ export default function LinkedInBrief({ url, onSaveUrl }) {
     setBrief(null);
     setError("");
     polls.current = 0;
-    if (url) load(false);
+    if (url) load("cached");
     return () => clearTimeout(timer.current);
   }, [url]);
 
@@ -85,6 +88,7 @@ export default function LinkedInBrief({ url, onSaveUrl }) {
   };
 
   const ready = brief?.status === "ready";
+  const generate = (mode) => { polls.current = 0; load(mode); };
   const showForm = !url || editing;
 
   return (
@@ -94,26 +98,34 @@ export default function LinkedInBrief({ url, onSaveUrl }) {
         {url && !editing && (
           <div className="li-head-right">
             {ready && !busy && <span className="muted small">Updated {updated(brief.fetched_at)}</span>}
-            <button className="btn btn-sm btn-secondary" disabled={busy} onClick={() => { polls.current = 0; load(true); }}>
-              {busy ? "Reading LinkedIn…" : "Refresh from LinkedIn"}
-            </button>
+            {(ready || brief?.status === "failed") && (
+              <button className="btn btn-sm btn-secondary" disabled={busy} onClick={() => generate("refresh")}>
+                {busy ? "Reading LinkedIn…" : "Refresh from LinkedIn"}
+              </button>
+            )}
           </div>
         )}
       </div>
       <div className="pad">
         {showForm ? (
           <>
-            {!url && <p className="muted li-intro">Add their LinkedIn and we'll pull talking points from their profile automatically.</p>}
+            {!url && <p className="muted li-intro">Add their LinkedIn link, then generate talking points from their profile.</p>}
             <LinkForm initial={editing ? url : ""} onSave={save} onCancel={editing ? () => setEditing(false) : null} />
           </>
         ) : (
           <>
             {busy && !ready ? (
               <p className="muted">Reading their LinkedIn profile and writing talking points. This can take up to a minute.</p>
-            ) : error && !ready ? (
+            ) : error && !ready && brief?.status !== "none" ? (
               <p className="error" style={{ marginTop: 0 }}>{error}</p>
             ) : brief?.status === "failed" ? (
               <p className="muted">{brief.error}</p>
+            ) : brief?.status === "none" ? (
+              <div className="li-empty">
+                <p className="muted">No talking points yet. Generate them from their LinkedIn profile when you're ready.</p>
+                <button className="btn" disabled={busy} onClick={() => generate("generate")}>Generate from LinkedIn</button>
+                {error && <p className="error">{error}</p>}
+              </div>
             ) : ready ? (
               <>
                 {brief.headline && <p className="li-headline">{brief.headline}</p>}
