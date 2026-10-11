@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { navigate } from "@/lib/router";
 import { useHubs } from "@/lib/useHubs";
-import { EXAMPLE_FOLLOW_UPS } from "@/lib/example";
+import { visibleExamples } from "@/lib/exampleState";
+import DeleteClient from "@/components/DeleteClient";
 import { relative, shortDay } from "@/lib/dates";
 
 function initials(name = "") {
@@ -17,10 +18,12 @@ function summary(c) {
 }
 
 // Client Hub: every client, A to Z. Example clients open their profile; real ones open their hub.
-export default function Hubs() {
+export default function Hubs({ notify }) {
   const list = useHubs();
   const [q, setQ] = useState("");
-  const clients = [...(list || []), ...EXAMPLE_FOLLOW_UPS]
+  const [removed, setRemoved] = useState(() => new Set());
+  const clients = [...(list || []), ...visibleExamples()]
+    .filter((c) => !removed.has(c.id))
     .filter((c) => c.client_name.toLowerCase().includes(q.trim().toLowerCase()))
     .sort((a, b) => a.client_name.localeCompare(b.client_name));
   const open = (c) => navigate(c.example ? `/clients/${c.id}` : `/hubs/${c.id}`);
@@ -42,14 +45,16 @@ export default function Hubs() {
           : (
             <div className="list">
               {clients.map((c) => (
-                <button className="fu-row" key={c.id} onClick={() => open(c)}>
+                <div className="fu-row hub-row" key={c.id} onClick={() => open(c)}>
                   <span className="avatar avatar-sm" aria-hidden="true">{initials(c.client_name)}</span>
-                  <div className="fu-main">
+                  <button className="fu-main hub-open" onClick={(e) => { e.stopPropagation(); open(c); }}>
                     <div className="strong">{c.client_name}</div>
                     <div className="muted small">{summary(c)}</div>
-                  </div>
+                  </button>
+                  <DeleteClient compact client={c} notify={notify}
+                    onDeleted={() => setRemoved((s) => new Set(s).add(c.id))} />
                   <span className="chevron" aria-hidden="true">›</span>
-                </button>
+                </div>
               ))}
             </div>
           )}

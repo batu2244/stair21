@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { EXAMPLE_FOLLOW_UPS } from "@/lib/example";
-import { confirmExample, isExampleConfirmed } from "@/lib/exampleState";
+import { confirmExample, isExampleConfirmed, visibleExamples } from "@/lib/exampleState";
+import { navigate } from "@/lib/router";
+import DeleteClient from "@/components/DeleteClient";
 import { meetingDate, relative } from "@/lib/dates";
 import BackLink from "@/components/BackLink";
 import "./ClientProfile.css";
@@ -20,7 +21,7 @@ function initials(name = "") {
 
 // Client profile for the dashboard's example clients (real clients open their hub).
 export default function ClientProfile({ id, notify }) {
-  const c = EXAMPLE_FOLLOW_UPS.find((x) => x.id === id);
+  const c = visibleExamples().find((x) => x.id === id);
   const [confirmed, setConfirmed] = useState(!!c?.meeting_confirmed || (c && isExampleConfirmed(c.id)));
 
   if (!c) {
@@ -172,6 +173,10 @@ export default function ClientProfile({ id, notify }) {
             </section>
           )}
         </div>
+      </div>
+
+      <div style={{ marginTop: 32 }}>
+        <DeleteClient client={c} onDeleted={() => navigate("/")} notify={notify} />
       </div>
     </main>
   );

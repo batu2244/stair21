@@ -2,9 +2,8 @@ import { Fragment, useEffect, useState } from "react";
 import { hubs } from "@/lib/api";
 import { navigate } from "@/lib/router";
 import { fromLocalInput, toLocalInput, relative, shortDay, timeOf } from "@/lib/dates";
-import { EXAMPLE_FOLLOW_UPS } from "@/lib/example";
-import ArchiveClient from "@/components/ArchiveClient";
-import { isExampleConfirmed } from "@/lib/exampleState";
+import DeleteClient from "@/components/DeleteClient";
+import { isExampleConfirmed, visibleExamples } from "@/lib/exampleState";
 import { WithBottomBanner } from "@/components/WealthBanner";
 
 // Dashboard: the follow-up manager. Who to contact, when, and whether they've confirmed.
@@ -120,7 +119,7 @@ function Manage({ h, onDone, notify }) {
           </button>
         )}
         <button className="link small" onClick={() => navigate(`/hubs/${h.id}`)}>Open hub ›</button>
-        <ArchiveClient hubId={h.id} name={h.client_name} onArchived={onDone} notify={notify} />
+        <DeleteClient client={h} onDeleted={onDone} notify={notify} />
       </div>
       {h.next_meeting_at && (
         <p className="hint">Mark done records the contact. Pick a new date first to schedule the next follow-up at the same time.</p>
@@ -139,7 +138,7 @@ export default function FollowUps({ me, notify }) {
   useEffect(() => { load(); }, []);
 
   const all = list
-    ? [...list, ...EXAMPLE_FOLLOW_UPS].map((h) => (h.example && isExampleConfirmed(h.id) ? { ...h, meeting_confirmed: true } : h))
+    ? [...list, ...visibleExamples()].map((h) => (h.example && isExampleConfirmed(h.id) ? { ...h, meeting_confirmed: true } : h))
     : [];
 
   const firstName = (me?.profile?.name || "").split(" ")[0];

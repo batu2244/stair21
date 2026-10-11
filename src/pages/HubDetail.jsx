@@ -3,7 +3,7 @@ import { hubs, STATUS } from "@/lib/api";
 import { navigate, linkUrl } from "@/lib/router";
 import HubView from "@/components/HubView";
 import BackLink from "@/components/BackLink";
-import ArchiveClient from "@/components/ArchiveClient";
+import DeleteClient from "@/components/DeleteClient";
 import FollowUpEditor from "@/components/FollowUpEditor";
 
 function formatDate(iso, time = false) {
@@ -231,7 +231,7 @@ export default function HubDetail({ id, me, notify }) {
       </section>
 
       <section className="dash-section">
-        <ArchiveClient hubId={hub.id} name={hub.client_name} onArchived={() => navigate("/")} notify={notify} />
+        <DeleteClient client={hub} onDeleted={() => navigate("/")} notify={notify} />
       </section>
     </main>
   );
