@@ -35,11 +35,13 @@ export default function ClientProfile({ id, notify }) {
 
   const p = c.profile || {};
   const pr = PRIORITY[c.priority];
+  // "A" reads as "Tier A"; a word like "Prospect" is shown as is.
+  const tierLabel = p.tier ? (/^[A-Z]$/i.test(p.tier) ? `Tier ${p.tier}` : p.tier) : "";
   const facts = [
-    { label: "Tier", value: p.tier ? `Tier ${p.tier}` : "—" },
+    { label: "Tier", value: tierLabel || "—" },
     { label: "Assets under management", value: p.aum || "—" },
     { label: "Owner", value: p.owner || "—" },
-    { label: "Last contact", value: formatDay(c.last_contact_at) },
+    { label: "Last contact", value: c.last_contact_at ? formatDay(c.last_contact_at) : "Not contacted yet" },
   ];
 
   return (
@@ -53,7 +55,7 @@ export default function ClientProfile({ id, notify }) {
           <h1 className="page-title">{c.client_name}</h1>
           <div className="cp-tags">
             {pr && <span className={`pill ${pr.pill}`}>{pr.label}</span>}
-            {p.tier && <span className="pill pill-draft">Tier {p.tier}</span>}
+            {tierLabel && <span className="pill pill-draft">{tierLabel}</span>}
           </div>
         </div>
       </header>
